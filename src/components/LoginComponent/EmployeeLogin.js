@@ -2,7 +2,6 @@ import React, { Component } from "react";
 import validate from "validate.js";
 import { connect } from "react-redux";
 import { validate_credentials } from "../../Actions/EmployeeLoginAction";
-
 import "./EmployeeLogin.scss";
 
 class EmployeeLogin extends Component {
@@ -12,6 +11,7 @@ class EmployeeLogin extends Component {
       username: "",
       password: "",
       errorMsgs: {},
+      emp_img: "media/employee_portal.jpg",
     };
     this.constraints = {
       username: {
@@ -67,7 +67,7 @@ class EmployeeLogin extends Component {
     this.props.validate_credentials(emp_credentials);
   };
   render() {
-    const { username, password, errorMsgs } = this.state;
+    const { username, password, errorMsgs, emp_img } = this.state;
     console.log(username, password);
     console.log(
       this.props.user_info,
@@ -75,11 +75,11 @@ class EmployeeLogin extends Component {
     );
     return (
       <div className="d-flex">
-        <div className="col-7 flex-row mt-5">
-          <h1>Employee portal</h1>
+        <div className="col-md-7 flex-row mt-5">
+          <img className="emp_img" src={emp_img} alt="image"></img>
         </div>
 
-        <div className="col-5 flex-row-reverse login-container">
+        <div className="col-md-5 flex-row-reverse login-container">
           <label className="emp-label">Employee Login</label>
           <div className="col-7 container">
             <form onSubmit={this.onFormSubmitHandler}>
@@ -125,7 +125,7 @@ class EmployeeLogin extends Component {
 
               <button
                 type="submit"
-                className="btn btn-primary btn-submit mt-3 mb-3"
+                className="btn btn-primary col-xs-2 form-control btn-submit mt-4 mb-3"
                 disabled={!username || !password}
               >
                 Login
