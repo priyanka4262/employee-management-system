@@ -1,8 +1,12 @@
 import React, { Component } from "react";
 import validate from "validate.js";
+import { withRouter } from "react-router";
 import { connect } from "react-redux";
 import { validate_credentials } from "../../Actions/EmployeeLoginAction";
 import "./EmployeeLogin.scss";
+//import Homepage from "../HomeComponent/Homepage";
+//import { push } from "connected-react-router";
+//import history from "../../store/Store";
 
 class EmployeeLogin extends Component {
   constructor() {
@@ -59,24 +63,24 @@ class EmployeeLogin extends Component {
   };
   onFormSubmitHandler = (event) => {
     event.preventDefault();
-    console.log(this.state);
     const emp_credentials = {
       username: this.state.username,
       password: this.state.password,
     };
-    this.props.validate_credentials(emp_credentials);
+    let history = this.props.history;
+    this.props.validate_credentials(emp_credentials, history);
   };
   render() {
     const { username, password, errorMsgs, emp_img } = this.state;
-    console.log(username, password);
     console.log(
       this.props.user_info,
       "user info coming from store using mapstatetoprops"
     );
+
     return (
       <div className="d-flex">
         <div className="col-md-7 flex-row mt-5">
-          <img className="emp_img" src={emp_img} alt="image"></img>
+          <img src={emp_img} alt="image" className="emp_img"></img>
         </div>
 
         <div className="col-md-5 flex-row-reverse login-container">
@@ -143,6 +147,12 @@ const mapStateToProps = (state) => {
     user_info: state.emp_login,
   };
 };
-export default connect(mapStateToProps, { validate_credentials })(
-  EmployeeLogin
+const mapDispatchtoProps = (dispatch) => {
+  return {
+    validate_credentials: (emp_credentials, history) =>
+      dispatch(validate_credentials(emp_credentials, history)),
+  };
+};
+export default withRouter(
+  connect(mapStateToProps, mapDispatchtoProps)(EmployeeLogin)
 );

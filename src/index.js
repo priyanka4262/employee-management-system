@@ -4,6 +4,7 @@ import reportWebVitals from "./reportWebVitals";
 import { Provider } from "react-redux";
 import { I18nextProvider } from "react-i18next";
 import { BrowserRouter } from "react-router-dom";
+import { ConnectedRouter } from "connected-react-router";
 
 import store from "./store/Store";
 import App from "./App";
@@ -17,6 +18,7 @@ import "bootstrap/dist/js/bootstrap.bundle.min";
 ReactDOM.render(
   <React.StrictMode>
     <Provider store={store()}>
+      {/* <ConnectedRouter history={history}> */}
       <ErrorBoundary>
         <I18nextProvider i18n={i18n}>
           <BrowserRouter>
@@ -24,6 +26,7 @@ ReactDOM.render(
           </BrowserRouter>
         </I18nextProvider>
       </ErrorBoundary>
+      {/* </ConnectedRouter> */}
     </Provider>
   </React.StrictMode>,
   document.getElementById("root")

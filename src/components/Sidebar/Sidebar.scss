@@ -1,0 +1,19 @@
+@import "~react-pro-sidebar/dist/scss/styles.scss";
+.pro-sidebar {
+  position: absolute;
+  height: 100%;
+}
+.sidebar-header {
+  font-size: 25px;
+  text-align: center;
+  height: 60px;
+  padding-top: 10px;
+  font-family: Arial, Helvetica, sans-serif;
+}
+.sidebar-footer {
+  font-size: 17px;
+  text-align: center;
+  height: 60px;
+  padding-top: 10px;
+  font-family: Arial, Helvetica, sans-serif;
+}
