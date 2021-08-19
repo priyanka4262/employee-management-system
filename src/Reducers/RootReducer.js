@@ -1,11 +1,12 @@
 import { combineReducers } from "redux";
 import EmployeeLoginReducer from "./EmployeeLoginReducer";
+import CreateEmpReducer from "./CreateEmpReducer";
 import { connectRouter } from "connected-react-router";
 
 const rootReducer = () =>
   combineReducers({
-    // router: connectRouter(history),
     emp_login: EmployeeLoginReducer,
+    emp_reg: CreateEmpReducer,
   });
 
 export default rootReducer;

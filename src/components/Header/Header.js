@@ -4,9 +4,18 @@ import HomeIconComponent from "../HomeIconComponent/HomeIconComponent";
 import "./Header.scss";
 
 class Header extends Component {
-  onIconClickHandler() {
-    console.log("clicked");
+  constructor() {
+    super();
+    this.state = {
+      showMenu: false,
+    };
   }
+  onIconClickHandler = () => {
+    this.setState({
+      showMenu: !this.state.showMenu,
+    });
+    this.props.onMenuClick(this.state.showMenu);
+  };
   render() {
     return (
       <div className="header d-flex justify-content-between">

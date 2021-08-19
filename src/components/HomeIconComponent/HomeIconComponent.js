@@ -30,12 +30,11 @@ export default class HomeIconComponent extends Component {
     const { anchorEl } = this.state;
     return (
       <div>
-        <Button
-          aria-controls="simple-menu"
-          aria-haspopup="true"
-          onClick={this.handleClick}
-        >
-          <i className="bi bi-person-circle icon"></i>
+        <Button aria-controls="simple-menu" aria-haspopup="true">
+          <i
+            className="bi bi-person-circle icon"
+            onClick={this.handleClick}
+          ></i>
         </Button>
         <Menu
           id="simple-menu"
@@ -43,6 +42,8 @@ export default class HomeIconComponent extends Component {
           keepMounted
           open={Boolean(anchorEl)}
           onClose={this.handleClose}
+          transformOrigin={{ vertical: "top", horizontal: "right" }}
+          anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
         >
           <MenuItem onClick={this.handleClose}>Profile</MenuItem>
           <MenuItem onClick={this.handleClose}>My account</MenuItem>
