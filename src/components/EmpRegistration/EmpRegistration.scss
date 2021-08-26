@@ -5,3 +5,11 @@
 .sub-heading {
   font-size: 20px;
 }
+
+.customDatePickerWidth {
+  .react-datepicker__input-container {
+    input {
+      width: 100%;
+    }
+  }
+}

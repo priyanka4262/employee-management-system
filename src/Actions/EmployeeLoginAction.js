@@ -13,6 +13,5 @@ export const validate_credentials =
         type: FETCH_ITEMS,
         user_info: response.data,
       });
-      //push("./Homepage");
     });
   };

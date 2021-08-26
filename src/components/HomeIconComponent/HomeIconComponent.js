@@ -42,7 +42,7 @@ export default class HomeIconComponent extends Component {
           keepMounted
           open={Boolean(anchorEl)}
           onClose={this.handleClose}
-          transformOrigin={{ vertical: "top", horizontal: "right" }}
+          transformOrigin={{ vertical: "bottom", horizontal: "right" }}
           anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
         >
           <MenuItem onClick={this.handleClose}>Profile</MenuItem>

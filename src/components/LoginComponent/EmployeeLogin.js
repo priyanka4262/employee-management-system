@@ -69,13 +69,17 @@ class EmployeeLogin extends Component {
     };
     let history = this.props.history;
     this.props.validate_credentials(emp_credentials, history);
-  };
-  render() {
-    const { username, password, errorMsgs, emp_img } = this.state;
     console.log(
       this.props.user_info,
       "user info coming from store using mapstatetoprops"
     );
+  };
+  onClickForgotPwdHandler = (event) => {
+    event.preventDefault();
+    this.props.history.push("./ForgotPwd");
+  };
+  render() {
+    const { username, password, errorMsgs, emp_img } = this.state;
 
     return (
       <div className="d-flex">
@@ -84,7 +88,9 @@ class EmployeeLogin extends Component {
         </div>
 
         <div className="col-md-5 flex-row-reverse login-container">
-          <label className="emp-label">Employee Login</label>
+          <div>
+            <label className="emp-label">Employee Login</label>
+          </div>
           <div className="col-7 container">
             <form onSubmit={this.onFormSubmitHandler}>
               <div className="form-group row px-2">
@@ -126,6 +132,11 @@ class EmployeeLogin extends Component {
                   </small>
                 )}
               </div>
+              <div className="form-group row text-center mt-3">
+                <a onClick={this.onClickForgotPwdHandler} href="">
+                  Forgot Password?
+                </a>
+              </div>
 
               <button
                 type="submit"
@@ -142,7 +153,6 @@ class EmployeeLogin extends Component {
   }
 }
 const mapStateToProps = (state) => {
-  console.log(state);
   return {
     user_info: state.emp_login,
   };

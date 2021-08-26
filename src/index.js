@@ -16,6 +16,8 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/js/bootstrap.min.js";
 import "bootstrap/dist/js/bootstrap.bundle.min";
 import "react-datepicker/dist/react-datepicker.css";
+import "font-awesome/css/font-awesome.min.css";
+
 axios.interceptors.request.use(
   (config) => {
     const token = localStorage.getItem("Token");
@@ -30,7 +32,6 @@ axios.interceptors.request.use(
 ReactDOM.render(
   <React.StrictMode>
     <Provider store={store()}>
-      {/* <ConnectedRouter history={history}> */}
       <ErrorBoundary>
         <I18nextProvider i18n={i18n}>
           <BrowserRouter>
@@ -38,7 +39,6 @@ ReactDOM.render(
           </BrowserRouter>
         </I18nextProvider>
       </ErrorBoundary>
-      {/* </ConnectedRouter> */}
     </Provider>
   </React.StrictMode>,
   document.getElementById("root")

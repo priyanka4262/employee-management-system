@@ -36,6 +36,10 @@ class Sidebar extends Component {
                   Create Employee
                   <Link to={`${path}/EmpRegistration`} />
                 </MenuItem>
+                <MenuItem>
+                  Employee List
+                  <Link to={`${path}/EmpList`} />
+                </MenuItem>
               </SubMenu>
             </Menu>
           </SidebarContent>

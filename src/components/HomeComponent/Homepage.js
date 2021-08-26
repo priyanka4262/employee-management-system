@@ -7,6 +7,7 @@ import DashBoard from "../DashBoard/DashBoard";
 import EmpProfile from "../EmpProfile/EmpProfile.js";
 import EmpRegistration from "../EmpRegistration/EmpRegistration";
 import RegSuccess from "../EmpRegistration/RegSuccess";
+import EmpList from "../EmpList/EmpList";
 //import "./Homepage.scss";
 class Homepage extends Component {
   constructor(props) {
@@ -44,6 +45,11 @@ class Homepage extends Component {
               <Route
                 path={`${match.path}/EmpRegistration`}
                 component={EmpRegistration}
+              ></Route>
+              <Route
+                exact
+                path={`${match.path}/EmpList`}
+                component={EmpList}
               ></Route>
               <Route
                 path={`${match.path}/RegSuccess`}

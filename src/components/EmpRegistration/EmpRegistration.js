@@ -22,17 +22,16 @@ class EmpRegistration extends Component {
     };
     this.constraints = {
       fname: {
-        presence: {
-          message: "First Name cannot be blank",
-        },
+        presence: true,
         length: {
           maximum: 20,
           message: "must be maximum of 20 characters",
         },
       },
+
       lname: {
         presence: {
-          message: "Last Name cannot be blank",
+          message: "last name is required",
         },
         length: {
           maximum: 20,
@@ -47,37 +46,31 @@ class EmpRegistration extends Component {
       },
       mobile1: {
         presence: {
-          message: "Primary Mobile number cannot be blank",
+          message: "Mobile number cannot be blank",
         },
         length: {
-          minimum: 10,
           maximum: 10,
-          message: "should be 10 numbers",
+          message: "mobile number should be 10 numbers",
         },
       },
       mobile2: {
         presence: {
-          message: "Secondary Mobile number cannot be blank",
+          message: "Mobile number cannot be blank",
         },
         length: {
-          minimum: 10,
           maximum: 10,
           message: "mobile number should be 10 numbers",
         },
       },
       address: {
-        presence: {
-          message: "Address cannot be blank",
-        },
+        presence: true,
         length: {
           maximum: 100,
           message: " Address should be max of 100 characters",
         },
       },
       dob: {
-        presence: {
-          message: "DateOfBirth cannot be blank",
-        },
+        presence: true,
       },
       payRollType: {
         presence: true,
@@ -114,6 +107,18 @@ class EmpRegistration extends Component {
   };
 
   onRegFormSubmitHandler = (event) => {
+    // console.log(event.target.value);
+    const {
+      fname,
+      lname,
+      email,
+      address,
+      errorMsgs,
+      mobile1,
+      mobile2,
+      dob,
+      payRollType,
+    } = this.state;
     event.preventDefault();
     const emp_reg_data = {
       fname: this.state.fname,
@@ -125,12 +130,12 @@ class EmpRegistration extends Component {
       dob: this.state.dob,
       payRollType: this.state.payRollType,
     };
-    let history = this.props.history;
-    if (!this.state.errorMsg) {
-      console.log("user creation successfull");
+    if (!this.state.errorMsgs) {
+      console.log("Login Successful", this.state);
+      let history = this.props.history;
       this.props.create_employee(emp_reg_data, history);
     } else {
-      console.log("employee creation unsuccessfull");
+      console.log("Login unSuccessful", this.state.errorMsg);
     }
   };
   onDateChangeHandler = (date) => {
@@ -152,79 +157,102 @@ class EmpRegistration extends Component {
       payRollType,
       errorMsgs,
     } = this.state;
-    console.log(this.props.user_reg_info);
+    //console.log(this.props.user_reg_info);
     return (
       <div>
-        <h2 className="text-center heading">Employee Registration</h2>
+        <h2 className="text-center heading mt-3">Employee Registration</h2>
         <section className="vh-100">
-          <div className="mask d-flex align-items-center h-100 gradient-custom-3 mt-3">
+          <div className="mask d-flex align-items-center h-100 gradient-custom-3 ">
             <div className="container h-100">
               <div className="row d-flex justify-content-center align-items-center h-100">
-                <div className="col-12 col-md-9 col-lg-7 col-xl-6">
-                  <div className="card" style={{ borderRadius: 15 + "px" }}>
+                <div className="col-md-10">
+                  <div className="card">
                     <div className="card-body p-3">
                       <h3 className=" text-center mb-5 sub-heading">
                         Create an Account
                       </h3>
                       <form onSubmit={this.onRegFormSubmitHandler}>
-                        <div className="form-outline mb-4">
-                          <label
-                            className="form-label fw-bold"
-                            htmlFor="form3Example1cg"
-                          >
-                            First Name
-                          </label>
-                          <input
-                            type="text"
-                            name="fname"
-                            value={fname}
-                            id="form3Example1cg"
-                            className="form-control form-control-lg"
-                            onChange={this.onChangeFieldHandler}
-                          />
+                        <div className="row">
+                          <div className="form-outline mb-4 col-md-6 ">
+                            <input
+                              type="text"
+                              name="fname"
+                              value={fname}
+                              placeholder="First Name"
+                              id="form3Example1cg"
+                              className="form-control form-control-md"
+                              onChange={this.onChangeFieldHandler}
+                            />
 
-                          {errorMsgs.fname && (
-                            <small className="form-text text-muted ">
-                              {errorMsgs.fname}
-                            </small>
-                          )}
-                        </div>
-                        <div className="form-outline mb-4">
-                          <label
-                            className="form-label fw-bold"
-                            htmlFor="form3Example1cg"
-                          >
-                            Last Name
-                          </label>
-                          <input
-                            type="text"
-                            value={lname}
-                            name="lname"
-                            id="form3Example1cg"
-                            className="form-control form-control-lg"
-                            onChange={this.onChangeFieldHandler}
-                          />
+                            {errorMsgs.fname && (
+                              <small className="form-text text-muted ">
+                                {errorMsgs.fname}
+                              </small>
+                            )}
+                          </div>
+                          <div className="form-outline mb-4 col-md-6">
+                            <input
+                              type="text"
+                              value={lname}
+                              name="lname"
+                              placeholder="Last Name"
+                              id="form3Example1cg"
+                              className="form-control form-control-md"
+                              onChange={this.onChangeFieldHandler}
+                            />
 
-                          {errorMsgs.lname && (
-                            <small className="form-text text-muted ">
-                              {errorMsgs.lname}
-                            </small>
-                          )}
+                            {errorMsgs.lname && (
+                              <small className="form-text text-muted ">
+                                {errorMsgs.lname}
+                              </small>
+                            )}
+                          </div>
                         </div>
 
+                        <div className="row">
+                          <div className="form-outline mb-4 col-md-6">
+                            <input
+                              type="tel"
+                              name="mobile1"
+                              value={mobile1}
+                              placeholder="Primary Mobile"
+                              id="form3Example3cg"
+                              className="form-control form-control-md"
+                              onChange={this.onChangeFieldHandler}
+                            />
+
+                            {errorMsgs.mobile1 && (
+                              <small className="form-text text-muted ">
+                                {errorMsgs.mobile1}
+                              </small>
+                            )}
+                          </div>
+                          <div className="form-outline mb-4 col-md-6">
+                            <input
+                              type="tel"
+                              name="mobile2"
+                              value={mobile2}
+                              placeholder="Secondary Mobile"
+                              id="form3Example3cg"
+                              className="form-control form-control-md"
+                              onChange={this.onChangeFieldHandler}
+                            />
+
+                            {errorMsgs.mobile2 && (
+                              <small className="form-text text-muted ">
+                                {errorMsgs.mobile2}
+                              </small>
+                            )}
+                          </div>
+                        </div>
                         <div className="form-outline mb-4">
-                          <label
-                            className="form-label fw-bold"
-                            htmlFor="form3Example3cg"
-                          >
-                            Personal Email
-                          </label>
                           <input
                             type="email"
                             name="email"
                             value={email}
+                            placeholder="Email ID"
                             id="form3Example3cg"
-                            className="form-control form-control-lg"
+                            className="form-control form-control-md"
                             onChange={this.onChangeFieldHandler}
                           />
 
@@ -234,81 +262,55 @@ class EmpRegistration extends Component {
                             </small>
                           )}
                         </div>
-                        <div className="form-outline mb-4">
-                          <label
-                            className="form-label fw-bold"
-                            htmlFor="form3Example3cg"
-                          >
-                            Primary Mobile
-                          </label>
-                          <input
-                            type="number"
-                            name="mobile1"
-                            value={mobile1}
-                            id="form3Example3cg"
-                            className="form-control form-control-lg"
-                            onChange={this.onChangeFieldHandler}
-                          />
+                        <div className="row">
+                          <div className="form-outline mb-4 col-md-6">
+                            <div className="customDatePickerWidth">
+                              <DatePicker
+                                name="dob"
+                                value={dob}
+                                placeholder="Date of Birth"
+                                selected={this.state.dob}
+                                className="form-control form-control-md"
+                                onChange={this.onDateChangeHandler}
+                              />
+                            </div>
 
-                          {errorMsgs.mobile1 && (
-                            <small className="form-text text-muted ">
-                              {errorMsgs.mobile1}
-                            </small>
-                          )}
-                        </div>
-                        <div className="form-outline mb-4">
-                          <label
-                            className="form-label fw-bold"
-                            htmlFor="form3Example3cg"
-                          >
-                            Secondary Mobile
-                          </label>
-                          <input
-                            type="number"
-                            name="mobile2"
-                            value={mobile2}
-                            id="form3Example3cg"
-                            className="form-control form-control-lg"
-                            onChange={this.onChangeFieldHandler}
-                          />
+                            {errorMsgs.dob && (
+                              <small className="form-text text-muted ">
+                                {errorMsgs.dob}
+                              </small>
+                            )}
+                          </div>
 
-                          {errorMsgs.mobile2 && (
-                            <small className="form-text text-muted ">
-                              {errorMsgs.mobile2}
-                            </small>
-                          )}
+                          <div className="form-outline mb-4 col-md-6">
+                            <select
+                              className="form-control"
+                              name="payRollType"
+                              onChange={this.onChangeFieldHandler}
+                              value={payRollType}
+                            >
+                              <option value="" disabled selected hidden>
+                                PayRoll Type
+                              </option>
+                              <option value="permanent">Permanent</option>
+                              <option value="contractor">Contractor</option>
+                            </select>
+                            {errorMsgs.payRollType && (
+                              <small
+                                id="emailHelp"
+                                className="form-text text-muted"
+                              >
+                                {errorMsgs.payRollType}
+                              </small>
+                            )}
+                          </div>
                         </div>
-                        <div className="form-outline mb-4">
-                          <label
-                            className="form-label fw-bold"
-                            htmlFor="form3Example3cg"
-                          >
-                            DateOfBirth
-                          </label>
-                          <DatePicker
-                            name="dob"
-                            value={dob}
-                            selected={this.state.dob}
-                            onChange={this.onDateChangeHandler}
-                          />
-
-                          {errorMsgs.address && (
-                            <small className="form-text text-muted ">
-                              {errorMsgs.address}
-                            </small>
-                          )}
-                        </div>
-                        <div className="form-outline mb-4">
-                          <label
-                            className="form-label fw-bold"
-                            htmlFor="form3Example3cg"
-                          >
-                            Address
-                          </label>
+                        <div className="form-outline mb-2">
                           <textarea
                             className="form-control"
                             name="address"
                             value={address}
+                            placeholder="Address"
                             id="exampleFormControlTextarea1"
                             rows="3"
                             onChange={this.onChangeFieldHandler}
@@ -320,54 +322,11 @@ class EmpRegistration extends Component {
                             </small>
                           )}
                         </div>
-                        <div className="form-outline mb-4">
-                          <label
-                            className="form-label fw-bold"
-                            htmlFor="form3Example3cg"
-                          >
-                            PayRoll Type
-                          </label>
-                          <select
-                            className="form-control"
-                            name="payRollType"
-                            onChange={this.onChangeFieldHandler}
-                            value={payRollType}
-                          >
-                            <option value="permanent">Permanent</option>
-                            <option value="contractor">Contractor</option>
-                          </select>
-                          {errorMsgs.payRollType && (
-                            <small
-                              id="emailHelp"
-                              className="form-text text-muted"
-                            >
-                              {errorMsgs.payRollType}
-                            </small>
-                          )}
-                        </div>
 
                         <div className="d-flex justify-content-center">
                           <button
                             type="submit"
                             className="btn btn-success btn-block btn-lg gradient-custom-4 text-body"
-                            disabled={
-                              !fname ||
-                              !lname ||
-                              !mobile1 ||
-                              !mobile2 ||
-                              !address ||
-                              !email ||
-                              !dob ||
-                              !payRollType ||
-                              fname.errorMsgs ||
-                              lname.errorMsgs ||
-                              mobile1.errorMsgs ||
-                              mobile2.errorMsgs ||
-                              address.errorMsgs ||
-                              email.errorMsgs ||
-                              dob.errorMsgs ||
-                              payRollType.errorMsgs
-                            }
                           >
                             Create
                           </button>
