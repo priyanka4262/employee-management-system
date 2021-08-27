@@ -27,6 +27,7 @@ class ForgotPwd extends Component {
     axios
       .post(url, { email: email })
       .then((response) => {
+        console.log(response);
         this.setState({
           successMsg: "OTP Sent to Email!",
           otpReceived: true,

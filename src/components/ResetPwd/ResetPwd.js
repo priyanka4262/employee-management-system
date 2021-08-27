@@ -67,7 +67,6 @@ export default class CheckOtp extends Component {
     const url = "http://localhost:8080/users/resetPassword";
     const payload = {
       email: this.props.match.params,
-      password: this.state.password,
       newpassword: this.state.newpassword,
     };
 
