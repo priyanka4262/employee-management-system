@@ -220,8 +220,8 @@ class EmpRegistration extends Component {
             <div className="container h-100">
               <div className="row d-flex justify-content-center align-items-center h-100">
                 <div className="col-md-10">
-                  <div className="card">
-                    <div className="card-body p-3">
+                  <div className="card ">
+                    <div className="card-body p-3 card-div-emp">
                       <h3 className=" text-center mb-5 sub-heading">
                         Create an Account
                       </h3>
@@ -242,6 +242,7 @@ class EmpRegistration extends Component {
                               id="form3Example1cg"
                               className="form-control form-control-md"
                               onChange={this.onChangeFieldHandler}
+                              autoComplete="off"
                             />
 
                             {errorMsgs.fname && (
@@ -264,6 +265,7 @@ class EmpRegistration extends Component {
                               placeholder="Last Name"
                               id="form3Example1cg"
                               className="form-control form-control-md"
+                              autoComplete="off"
                               onChange={this.onChangeFieldHandler}
                             />
 
@@ -290,6 +292,7 @@ class EmpRegistration extends Component {
                               name="mobile1"
                               placeholder="Primary Mobile"
                               className="form-control"
+                              autoComplete="off"
                               onChange={this.onChangeFieldHandler}
                             />
 
@@ -312,6 +315,7 @@ class EmpRegistration extends Component {
                               name="mobile2"
                               placeholder="Primary Mobile"
                               className="form-control"
+                              autoComplete="off"
                               onChange={this.onChangeFieldHandler}
                             />
 
@@ -322,28 +326,60 @@ class EmpRegistration extends Component {
                             )}
                           </div>
                         </div>
-                        <div className="form-outline mb-4 form-group required">
-                          <label
-                            className="form-label fw-bold control-label"
-                            htmlFor="form3Example3cg"
-                          >
-                            Email ID
-                          </label>
-                          <input
-                            type="email"
-                            name="email"
-                            value={email}
-                            placeholder="Email ID"
-                            id="form3Example3cg"
-                            className="form-control form-control-md"
-                            onChange={this.onChangeFieldHandler}
-                          />
+                        <div className="row">
+                          <div className="form-outline mb-4 col-md-6 form-group required">
+                            <label
+                              className="form-label fw-bold control-label"
+                              htmlFor="form3Example3cg"
+                            >
+                              Email ID
+                            </label>
+                            <input
+                              type="email"
+                              name="email"
+                              value={email}
+                              placeholder="Email ID"
+                              id="form3Example3cg"
+                              autoComplete="off"
+                              className="form-control form-control-md"
+                              onChange={this.onChangeFieldHandler}
+                            />
 
-                          {errorMsgs.email && (
-                            <small className="form-text text-danger ">
-                              {errorMsgs.email}
-                            </small>
-                          )}
+                            {errorMsgs.email && (
+                              <small className="form-text text-danger ">
+                                {errorMsgs.email}
+                              </small>
+                            )}
+                          </div>
+                          <div className="form-outline mb-4 col-md-6 form-group required">
+                            <label
+                              className="form-label fw-bold control-label"
+                              htmlFor="form3Example3cg"
+                            >
+                              Designation
+                            </label>
+                            <select
+                              className="form-control"
+                              name="designation"
+                              onChange={this.onChangeFieldHandler}
+                              value={designation}
+                            >
+                              <option value="" disabled>
+                                Designation
+                              </option>
+                              <option value="Associate">Associate</option>
+                              <option value="Associate Manager">
+                                Associate Manager
+                              </option>
+                              <option value="Team Lead">Team Lead</option>
+                            </select>
+
+                            {errorMsgs.designation && (
+                              <small className="form-text text-danger ">
+                                {errorMsgs.designation}
+                              </small>
+                            )}
+                          </div>
                         </div>
                         <div className="row">
                           <div className="form-outline mb-4 col-md-6">
@@ -358,6 +394,7 @@ class EmpRegistration extends Component {
                                 name="dob"
                                 value={dob}
                                 placeholder="Date of Birth"
+                                autoComplete="off"
                                 selected={this.state.dob}
                                 className="form-control form-control-md"
                                 onChange={this.onDateChangeHandler}
@@ -438,6 +475,7 @@ class EmpRegistration extends Component {
                               name="cost"
                               value={cost}
                               placeholder="CTC"
+                              autoComplete="off"
                               id="form3Example3cg"
                               className="form-control form-control-md"
                               onChange={this.onChangeFieldHandler}
@@ -553,6 +591,7 @@ class EmpRegistration extends Component {
                               name="rmanager"
                               value={rmanager}
                               placeholder="Manager"
+                              autoComplete="off"
                               id="form3Example3cg"
                               className="form-control form-control-md"
                               onChange={this.onChangeFieldHandler}
@@ -567,60 +606,30 @@ class EmpRegistration extends Component {
                             )}
                           </div>
                         </div>
-                        <div className="row">
-                          <div className="form-outline mb-4 col-md-6 form-group required">
-                            <label
-                              className="form-label fw-bold control-label"
-                              htmlFor="form3Example3cg"
-                            >
-                              Designation
-                            </label>
-                            <select
-                              className="form-control"
-                              name="designation"
-                              onChange={this.onChangeFieldHandler}
-                              value={designation}
-                            >
-                              <option value="" disabled>
-                                Designation
-                              </option>
-                              <option value="Associate">Associate</option>
-                              <option value="Associate Manager">
-                                Associate Manager
-                              </option>
-                              <option value="Team Lead">Team Lead</option>
-                            </select>
 
-                            {errorMsgs.designation && (
-                              <small className="form-text text-danger ">
-                                {errorMsgs.designation}
-                              </small>
-                            )}
-                          </div>
+                        <div className="form-outline mb-2">
+                          <label
+                            className="form-label fw-bold"
+                            htmlFor="form3Example3cg"
+                          >
+                            Address
+                          </label>
+                          <textarea
+                            className="form-control"
+                            name="address"
+                            value={address}
+                            placeholder="Address"
+                            id="exampleFormControlTextarea1"
+                            autoComplete="off"
+                            rows="3"
+                            onChange={this.onChangeFieldHandler}
+                          ></textarea>
 
-                          <div className="form-outline mb-2">
-                            <label
-                              className="form-label fw-bold"
-                              htmlFor="form3Example3cg"
-                            >
-                              Address
-                            </label>
-                            <textarea
-                              className="form-control"
-                              name="address"
-                              value={address}
-                              placeholder="Address"
-                              id="exampleFormControlTextarea1"
-                              rows="3"
-                              onChange={this.onChangeFieldHandler}
-                            ></textarea>
-
-                            {errorMsgs.address && (
-                              <small className="form-text text-danger ">
-                                {errorMsgs.address}
-                              </small>
-                            )}
-                          </div>
+                          {errorMsgs.address && (
+                            <small className="form-text text-danger ">
+                              {errorMsgs.address}
+                            </small>
+                          )}
                         </div>
 
                         <div className="d-flex justify-content-center">
