@@ -20,7 +20,7 @@ class EmpProfile extends Component {
     var emp_data = this.props.user_info.emp_login.data;
     const {
       employeeName,
-      Designation,
+      designation,
       employeeType,
       personalEmail,
       role,
@@ -38,7 +38,7 @@ class EmpProfile extends Component {
               </tr>
               <tr>
                 <td>Designation</td>
-                <td>{Designation}</td>
+                <td>{designation}</td>
               </tr>
               <tr>
                 <td>Employee Type</td>

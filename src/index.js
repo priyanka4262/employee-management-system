@@ -21,7 +21,7 @@ import "font-awesome/css/font-awesome.min.css";
 axios.interceptors.request.use(
   (config) => {
     const token = localStorage.getItem("Token");
-    config.headers.authorization = `${token}`;
+    config.headers.authorization = `Bearer ${token}`;
     return config;
   },
   (error) => {

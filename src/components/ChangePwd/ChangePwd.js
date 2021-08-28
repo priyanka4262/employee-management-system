@@ -1,23 +1,25 @@
 import React, { Component } from "react";
 import { validate } from "validate.js";
 import axios from "axios";
-import "./ResetPwd.scss";
 import { connect } from "react-redux";
+import EmployeeLogin from "../LoginComponent/EmployeeLogin";
 
-class ResetPwd extends Component {
+class ChangePwd extends Component {
   constructor() {
     super();
     this.state = {
+      email: "",
       password: "",
       newpassword: "",
       errorMsgs: {},
-      pwdReset: false,
+      pwdChange: false,
       successMsg: "",
       errorMsg: "",
-      pwdReset: false,
-      email: this.props?.get_email,
     };
     this.constraints = {
+      email: {
+        presence: true,
+      },
       password: {
         presence: true,
         length: {
@@ -49,7 +51,11 @@ class ResetPwd extends Component {
     const { errorMsgs } = this.state;
     let key = event.target.name;
     let value = event.target.value;
-    if (key === "password") {
+    if (key === "email") {
+      this.setState({
+        email: value,
+      });
+    } else if (key === "password") {
       this.setState({
         password: value,
       });
@@ -65,14 +71,14 @@ class ResetPwd extends Component {
     });
   };
   onSubmitFormHandler = (event) => {
-    console.log(this.state.email);
     event.preventDefault();
-    const url = "http://localhost:8080/users/resetPassword";
+    const url = "http://localhost:8080/users/changePassword";
     const payload = {
-      email: this.props?.get_email.email,
-      newpassword: this.state.newpassword,
+      oldpassword: this.props.user_info.emp_login?.data.password,
+      newpassword: this.state.password,
+      confirmpassword: this.state.newpassword,
+      employeeId: this.props.user_info.emp_login?.data.employeeId,
     };
-    console.log(payload, "payload");
 
     axios
       .post(url, payload)
@@ -80,36 +86,55 @@ class ResetPwd extends Component {
         console.log(response);
         this.setState({
           successMsg: "Password changed succesfully!",
-          pwdReset: true,
+          pwdChange: true,
         });
       })
       .catch((err) => {
         this.setState({
           errorMsg: "please try again!!",
-          pwdReset: false,
+          pwdChange: false,
         });
         console.log(err);
       });
   };
   render() {
-    const { pwdReset, successMsg, errorMsg, errorMsgs, password, newpassword } =
-      this.state;
-    // console.log(this.props.match.params.email);
-    // console.log(this.props.user_info);
-    console.log(this.props?.get_email.email);
+    const {
+      pwdChange,
+      successMsg,
+      errorMsg,
+      errorMsgs,
+      password,
+      newpassword,
+      email,
+    } = this.state;
+    console.log(this.props.user_info.emp_login?.data.employeeId);
     return (
       <div>
         <form onSubmit={this.onSubmitFormHandler}>
           <div className="card card-div-reset">
             <div className="card-body">
               <h5 className="card-title text-center font-weight-bold text-md">
-                Reset Password
+                Change Password
               </h5>
+              <div>
+                <input
+                  name="email"
+                  type="email"
+                  className="form-control "
+                  placeholder="Email ID"
+                  onChange={this.onPasswordChangeHandler}
+                />
+                {errorMsgs.email && (
+                  <small className="form-text text-danger">
+                    {errorMsgs.email}
+                  </small>
+                )}
+              </div>
               <div>
                 <input
                   name="password"
                   type="password"
-                  className="form-control "
+                  className="form-control mt-3"
                   placeholder="New Password"
                   onChange={this.onPasswordChangeHandler}
                 />
@@ -137,13 +162,13 @@ class ResetPwd extends Component {
               <button
                 type="submit"
                 className="btn btn-primary mt-3 changepwd-btn"
-                disabled={!password || !newpassword}
+                disabled={!password || !newpassword || !email}
               >
                 Change Password
               </button>
 
               <div>
-                {pwdReset ? (
+                {pwdChange ? (
                   <div className="text-center text-success mt-3">
                     {successMsg}
                   </div>
@@ -163,8 +188,7 @@ class ResetPwd extends Component {
 const mapStateToProps = (state) => {
   console.log(state);
   return {
-    // get_otp: state.forgot_pwd.get_otp,
-    get_email: state.forgot_pwd.get_email,
+    user_info: state.emp_login,
   };
 };
-export default connect(mapStateToProps, null)(ResetPwd);
+export default connect(mapStateToProps, null)(ChangePwd);

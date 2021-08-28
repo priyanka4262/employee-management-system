@@ -2,7 +2,7 @@ import { REGDATA } from "../Actions/Constants";
 
 const initialState = {};
 export default function (state = initialState, action) {
-  console.log("action in reducer", action);
+  //console.log("action in reducer", action);
 
   switch (action.type) {
     case REGDATA:

@@ -1,6 +1,9 @@
 import axios from "axios";
 import { withRouter } from "react-router";
 import React, { Component } from "react";
+import { forgot_pwd_action } from "../../Actions/ForgotPwdAction";
+import { get_email_action } from "../../Actions/ForgotPwdAction";
+import { connect } from "react-redux";
 import "./ForgotPwd.scss";
 
 class ForgotPwd extends Component {
@@ -13,6 +16,7 @@ class ForgotPwd extends Component {
       otpReceived: false,
       otpValue: "",
       otpResponse: "",
+      email_store: "",
     };
   }
   onEmailChangeHandler = (event) => {
@@ -23,23 +27,35 @@ class ForgotPwd extends Component {
   OtpGenerationHandler = (event) => {
     event.preventDefault();
     const { email, successMsg, errorMsg } = this.state;
+
     const url = "http://localhost:8080/users/otpgeneration";
-    axios
-      .post(url, { email: email })
-      .then((response) => {
-        console.log(response);
-        this.setState({
-          successMsg: "OTP Sent to Email!",
-          otpReceived: true,
-          otpResponse: response.data,
-        });
-      })
-      .catch((err) => {
-        this.setState({
-          errorMsg: "Unable to generate OTP",
-          otpReceived: false,
-        });
+    this.props.forgot_pwd_action({ email: email });
+    this.props.get_email_action({ email: email });
+    if (this.props.get_otp?.status === 200) {
+      this.setState({
+        successMsg: "OTP Sent to Email!",
+        otpReceived: true,
+        otpResponse: true,
       });
+    } else {
+      this.setState({
+        errorMsg: "Unable to generate OTP",
+        otpReceived: false,
+      });
+    }
+    // axios
+    //   .post(url, { email: email })
+    //   .then((response) => {
+    //     console.log(response);
+    //     this.setState({
+    //       successMsg: "OTP Sent to Email!",
+    //       otpReceived: true,
+    //       otpResponse: response.data,
+    //     });
+    //   })
+    //   .catch((err) => {
+    //
+    //   });
   };
   otpFieldHandler = (event) => {
     this.setState({
@@ -48,18 +64,18 @@ class ForgotPwd extends Component {
   };
   onOtpSubmitHandler = (event) => {
     event.preventDefault();
-    const path = this.props.location.pathname;
+
     const url = "http://localhost:8080/users/checkOtp";
     const payload = {
       email: this.state.email,
-      otp: Number(this.state.otpValue),
+      otp: parseInt(this.state.otpValue),
     };
 
     axios
       .post(url, payload)
       .then((response) => {
-        if (response.data.status === 200) {
-          this.props.history.push(`/ResetPwd/${payload.email}`);
+        if (response.data?.status === 200) {
+          this.props.history.push("/ResetPwd");
         } else {
           this.setState({
             errorMsg: "Invalid OTP, please try again!",
@@ -71,6 +87,9 @@ class ForgotPwd extends Component {
 
   render() {
     const { successMsg, errorMsg, otpReceived, email } = this.state;
+    console.log(this.props.get_otp?.status, "user otp value");
+    console.log(this.props.get_email?.email, "email value");
+
     return (
       <div>
         <div className="container container-div">
@@ -154,4 +173,19 @@ class ForgotPwd extends Component {
     );
   }
 }
-export default withRouter(ForgotPwd);
+const mapStateToProps = (state) => {
+  console.log(state);
+  return {
+    get_otp: state.forgot_pwd.get_otp,
+    get_email: state.forgot_pwd.get_email,
+  };
+};
+const mapDispatchtoProps = (dispatch) => {
+  return {
+    forgot_pwd_action: (email) => dispatch(forgot_pwd_action(email)),
+    get_email_action: (email) => dispatch(get_email_action(email)),
+  };
+};
+export default withRouter(
+  connect(mapStateToProps, mapDispatchtoProps)(ForgotPwd)
+);

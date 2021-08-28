@@ -5,7 +5,7 @@ import { create_employee } from "../../Actions/CreateEmpAction";
 import DatePicker from "react-datepicker";
 import validate from "validate.js";
 import "react-phone-number-input/style.css";
-import PhoneInput from "react-phone-number-input";
+
 import "./EmpRegistration.scss";
 
 class EmpRegistration extends Component {
@@ -100,6 +100,13 @@ class EmpRegistration extends Component {
       designation: {
         presence: true,
       },
+      rmanager: {
+        presence: true,
+        numericality: {
+          onlyInteger: true,
+          greaterThan: 0,
+        },
+      },
     };
   }
   validateInput = (field, value) => {
@@ -137,26 +144,8 @@ class EmpRegistration extends Component {
 
   onRegFormSubmitHandler = (event) => {
     event.preventDefault();
-    // console.log(event.target.value);
-    const {
-      fname,
-      lname,
-      email,
-      address,
-      errorMsgs,
-      mobile1,
-      mobile2,
-      dob,
-      payRollType,
-      employeeType,
-      rmanager,
-      role,
-      jobstatus,
-      doj,
-      cost,
-    } = this.state;
-
     console.log(this.state, "state value of emp reg");
+    console.log(parseInt(this.state.rmanager), "rmanager");
     const emp_reg_data = {
       fname: this.state.fname,
       lname: this.state.lname,
@@ -167,7 +156,7 @@ class EmpRegistration extends Component {
       dob: this.state.dob,
       epayroll: this.state.payRollType,
       erole: this.state.role,
-      eType: this.state.employeeType,
+      etype: this.state.employeeType,
       ctc: this.state.cost,
       doj: this.state.doj,
       jobstatus: this.state.jobstatus,
@@ -214,7 +203,7 @@ class EmpRegistration extends Component {
 
     return (
       <div>
-        <h2 className="text-center heading mt-3">Employee Registration</h2>
+        <h2 className="text-center heading mt-3"></h2>
         <section className="vh-100">
           <div className="mask d-flex align-items-center h-100 gradient-custom-3 ">
             <div className="container h-100">
@@ -223,7 +212,7 @@ class EmpRegistration extends Component {
                   <div className="card ">
                     <div className="card-body p-3 card-div-emp">
                       <h3 className=" text-center mb-5 sub-heading">
-                        Create an Account
+                        Register an Employee
                       </h3>
                       <form onSubmit={this.onRegFormSubmitHandler}>
                         <div className="row">

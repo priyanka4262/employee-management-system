@@ -4,10 +4,6 @@ import { withRouter } from "react-router";
 import { connect } from "react-redux";
 import { validate_credentials } from "../../Actions/EmployeeLoginAction";
 import "./EmployeeLogin.scss";
-//import Homepage from "../HomeComponent/Homepage";
-//import { push } from "connected-react-router";
-//import history from "../../store/Store";
-
 class EmployeeLogin extends Component {
   constructor() {
     super();
