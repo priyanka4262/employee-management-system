@@ -1,26 +1,39 @@
 import React, { Component } from "react";
 import axios from "axios";
+import ReactPaginate from "react-paginate";
 import "./EmpList.scss";
 
+const usersPerPage = 10;
 class EmpList extends Component {
   constructor() {
     super();
     this.state = {
       users: [],
       searchText: "",
+      pageNumber: 0,
+      displayUsers: [],
     };
   }
+
   componentDidMount() {
     axios
       .get("http://localhost:8080/users/allemployees")
       .then((response) => {
-        //  console.log(response.data.data);
         this.setState({
           users: response.data.data,
+          displayUsers: response.data.data.slice(0, usersPerPage),
         });
       })
       .catch((error) => console.log(error));
   }
+  changePage = ({ selected }) => {
+    const { users } = this.state;
+    const usersVisited = selected * usersPerPage;
+    this.setState({
+      pageNumber: selected,
+      displayUsers: users.slice(usersVisited, usersVisited + usersPerPage),
+    });
+  };
   onSearchFieldHandler = (event) => {
     console.log("search triggered");
     this.setState({
@@ -28,9 +41,11 @@ class EmpList extends Component {
     });
   };
   render() {
-    const { users, searchText } = this.state;
+    const { searchText, displayUsers } = this.state;
+    const pageCount = Math.ceil(this.state.users.length / usersPerPage);
+    let serialNumber = this.state.pageNumber * usersPerPage + 1;
 
-    let newUsersList = users.filter(
+    let newUsersList = displayUsers.filter(
       (user) =>
         user.employeeId == searchText ||
         user.employeeName?.toLowerCase().includes(searchText?.toLowerCase()) ||
@@ -60,6 +75,7 @@ class EmpList extends Component {
           >
             <thead>
               <tr>
+                <th scope="col">Serial No</th>
                 <th scope="col">Employee Name</th>
                 <th scope="col">Employee ID</th>
                 <th scope="col">Designation</th>
@@ -68,8 +84,9 @@ class EmpList extends Component {
               </tr>
             </thead>
             <tbody>
-              {newUsersList.map((user) => (
+              {newUsersList.map((user, index) => (
                 <tr key={user.employeeId + user.employeeName}>
+                  <td>{index + serialNumber} </td>
                   <td>{user.employeeName}</td>
                   <td>{user.employeeId} </td>
                   <td>{user.designation}</td>
@@ -80,6 +97,17 @@ class EmpList extends Component {
             </tbody>
           </table>
         </div>
+        <ReactPaginate
+          previousLabel={"Previous"}
+          nextLabel={"Next"}
+          onPageChange={this.changePage}
+          pageCount={pageCount}
+          containerClassName={"paginationBttns"}
+          previousLinkClassName={"previousBttn"}
+          nextLinkClassName={"nextBttn"}
+          disabledClassName={"paginationDisabled"}
+          activeClassName={"paginationActive"}
+        />
       </div>
     );
   }
