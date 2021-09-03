@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { validate } from "validate.js";
 import axios from "axios";
 import { connect } from "react-redux";
+import { withRouter } from "react-router-dom";
 import EmployeeLogin from "../LoginComponent/EmployeeLogin";
 
 class ChangePwd extends Component {
@@ -67,6 +68,7 @@ class ChangePwd extends Component {
     let errMsg = this.validateInput(key, value);
     errorMsgs[key] = errMsg;
     this.setState({
+      //[key]: value,
       errorMsgs: errorMsgs,
     });
   };
@@ -74,9 +76,9 @@ class ChangePwd extends Component {
     event.preventDefault();
     const url = "http://localhost:8080/users/changePassword";
     const payload = {
-      oldpassword: this.props.user_info.emp_login?.data.password,
-      newpassword: this.state.password,
+      currentpassword: this.props.user_info.emp_login?.data.password,
       confirmpassword: this.state.newpassword,
+      newpassword: this.state.password,
       employeeId: this.props.user_info.emp_login?.data.employeeId,
     };
 
@@ -96,6 +98,9 @@ class ChangePwd extends Component {
         });
         console.log(err);
       });
+  };
+  backToLoginHandler = () => {
+    this.props.history.push("./");
   };
   render() {
     const {
@@ -169,8 +174,16 @@ class ChangePwd extends Component {
 
               <div>
                 {pwdChange ? (
-                  <div className="text-center text-success mt-3">
-                    {successMsg}
+                  <div className="d-flex mt-3 justify-content-center success-msg">
+                    <div className="text-success">{successMsg}</div>
+                    <div>
+                      <button
+                        className="btn btn-primary"
+                        onClick={this.backToLoginHandler}
+                      >
+                        Back To Login
+                      </button>
+                    </div>
                   </div>
                 ) : (
                   <div className=" text-center mt-3 text-danger">
@@ -191,4 +204,4 @@ const mapStateToProps = (state) => {
     user_info: state.emp_login,
   };
 };
-export default connect(mapStateToProps, null)(ChangePwd);
+export default withRouter(connect(mapStateToProps, null)(ChangePwd));

@@ -7,6 +7,7 @@ import validate from "validate.js";
 import "react-phone-number-input/style.css";
 
 import "./EmpRegistration.scss";
+import axios from "axios";
 
 class EmpRegistration extends Component {
   constructor() {
@@ -28,6 +29,7 @@ class EmpRegistration extends Component {
       cost: "",
       designation: "",
       errorMsgs: {},
+      managersList: [],
     };
     this.constraints = {
       fname: {
@@ -102,10 +104,6 @@ class EmpRegistration extends Component {
       },
       rmanager: {
         presence: true,
-        numericality: {
-          onlyInteger: true,
-          greaterThan: 0,
-        },
       },
     };
   }
@@ -122,25 +120,44 @@ class EmpRegistration extends Component {
 
   onChangeFieldHandler = (event) => {
     event.preventDefault();
+    console.log("selected value", event.target.value, event.target.name);
     const { errorMsgs } = this.state;
     let key = event.target.name;
     let value =
-      event.target.value === "Select" ? undefined : event.target.value;
+      event.target.value === "select" ? undefined : event.target.value;
     let errorMsg = this.validateInput(key, value);
     errorMsgs[key] = errorMsg;
-    this.setState({
-      [key]: value,
-      errorMsgs: errorMsgs,
-    });
+    this.setState(
+      {
+        [key]: value,
+        errorMsgs: errorMsgs,
+      },
+      () => console.log("manager", [this.state.rmanager])
+    );
   };
 
-  validateForm = () => {
-    if (!this.state.fname || !this.state.lname) {
-      return true;
-    } else {
-      return false;
-    }
-  };
+  // validateForm = () => {
+  //   if (!this.state.fname || !this.state.lname) {
+  //     return true;
+  //   } else {
+  //     return false;
+  //   }
+  // };
+  componentDidMount() {
+    let url = "http://localhost:8080/users/managers";
+    axios
+      .get(url)
+      .then((response) => {
+        console.log(response.data, "response from dropdown api");
+        this.setState({
+          managersList: response.data,
+        });
+        console.log(this.state.managersList, "list of managers");
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }
 
   onRegFormSubmitHandler = (event) => {
     event.preventDefault();
@@ -199,6 +216,7 @@ class EmpRegistration extends Component {
       errorMsgs,
       designation,
       cost,
+      managersList,
     } = this.state;
 
     return (
@@ -229,7 +247,7 @@ class EmpRegistration extends Component {
                               value={fname}
                               placeholder="First Name"
                               id="form3Example1cg"
-                              className="form-control form-control-md"
+                              className="form-control form-control-md "
                               onChange={this.onChangeFieldHandler}
                               autoComplete="off"
                             />
@@ -575,21 +593,26 @@ class EmpRegistration extends Component {
                             >
                               Manager
                             </label>
-                            <input
-                              type="number"
+                            <select
+                              className="form-control"
                               name="rmanager"
-                              value={rmanager}
-                              placeholder="Manager"
-                              autoComplete="off"
-                              id="form3Example3cg"
-                              className="form-control form-control-md"
                               onChange={this.onChangeFieldHandler}
-                            />
+                              value={rmanager}
+                            >
+                              <option value="" disabled>
+                                Manager
+                              </option>
+                              {managersList.map((obj) => {
+                                return (
+                                  <option key={obj._id} value={obj.employeeId}>
+                                    {obj.employeeName}
+                                  </option>
+                                );
+                              })}
+                            </select>
+
                             {errorMsgs.rmanager && (
-                              <small
-                                id="emailHelp"
-                                className="form-text text-danger"
-                              >
+                              <small className="form-text text-danger ">
                                 {errorMsgs.rmanager}
                               </small>
                             )}

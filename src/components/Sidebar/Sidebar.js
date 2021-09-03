@@ -3,6 +3,7 @@ import { ProSidebar, SidebarContent } from "react-pro-sidebar";
 import { Menu, MenuItem, SubMenu } from "react-pro-sidebar";
 import { FaGem, FaHeart, FaUser } from "react-icons/fa";
 import { withRouter, Link } from "react-router-dom";
+import "react-pro-sidebar/dist/scss/styles.scss";
 import "./Sidebar.scss";
 
 class Sidebar extends Component {
@@ -21,12 +22,12 @@ class Sidebar extends Component {
             <Menu iconShape="square">
               <MenuItem icon={<FaGem />}>
                 Dashboard
-                <Link to={`${path}/Dashboard`} />
+                <Link to={`${path}/dashboard`} />
               </MenuItem>
               <SubMenu icon={<FaHeart />} title="My Collection ">
                 <MenuItem>
                   My Profile
-                  <Link to={`${path}/MyProfile`} />
+                  <Link to={`${path}/myprofile`} />
                 </MenuItem>
                 <MenuItem>My Colleagues</MenuItem>
                 <MenuItem>My Timesheets</MenuItem>
@@ -34,11 +35,11 @@ class Sidebar extends Component {
               <SubMenu icon={<FaUser />} title="Employee">
                 <MenuItem>
                   Create Employee
-                  <Link to={`${path}/EmpRegistration`} />
+                  <Link to={`${path}/empregistration`} />
                 </MenuItem>
                 <MenuItem>
                   Employee List
-                  <Link to={`${path}/EmpList`} />
+                  <Link to={`${path}/emplist`} />
                 </MenuItem>
               </SubMenu>
             </Menu>

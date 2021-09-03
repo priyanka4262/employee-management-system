@@ -1,20 +1,18 @@
 import axios from "axios";
-
 import { FETCH_ITEMS } from "./Constants";
-//import { push } from "connected-react-router";
 
 export const validate_credentials =
   (emp_credentials, history) => (dispatch) => {
     const url = "http://localhost:8080/users/login";
     axios.post(url, emp_credentials).then((response) => {
       if (response.data.code === 1) {
-        if (response.data.data.firstLogin == true) {
-          history.push("./ChangePwd");
+        if (response.data.data.firstLogin) {
+          history.push("./changepwd");
         } else {
-          history.push("./Homepage");
+          history.push("./homepage");
         }
       } else {
-        history.push("./ErrorPage");
+        history.push("./errorPage");
       }
       localStorage.setItem("Token", response.data.token);
       dispatch({

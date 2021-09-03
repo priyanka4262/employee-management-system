@@ -3,6 +3,7 @@ import { withRouter } from "react-router";
 import React, { Component } from "react";
 import { forgot_pwd_action } from "../../Actions/ForgotPwdAction";
 import { get_email_action } from "../../Actions/ForgotPwdAction";
+import Loader from "../Loader/Loader";
 import { connect } from "react-redux";
 import "./ForgotPwd.scss";
 
@@ -17,17 +18,22 @@ class ForgotPwd extends Component {
       otpValue: "",
       otpResponse: "",
       email_store: "",
+      isLoading: false,
     };
   }
+
   onEmailChangeHandler = (event) => {
     this.setState({
       email: event.target.value,
     });
   };
+
   OtpGenerationHandler = (event) => {
+    this.setState({
+      isLoading: true,
+    });
     event.preventDefault();
     const { email, successMsg, errorMsg } = this.state;
-
     const url = "http://localhost:8080/users/otpgeneration";
     this.props.forgot_pwd_action({ email: email });
     this.props.get_email_action({ email: email });
@@ -35,36 +41,28 @@ class ForgotPwd extends Component {
       this.setState({
         successMsg: "OTP Sent to Email!",
         otpReceived: true,
-        otpResponse: true,
+        //otpResponse: true,
+        isLoading: false,
+        email: "",
       });
-    } else {
+    } else if (this.props.get_otp) {
       this.setState({
         errorMsg: "Unable to generate OTP",
         otpReceived: false,
       });
     }
-    // axios
-    //   .post(url, { email: email })
-    //   .then((response) => {
-    //     console.log(response);
-    //     this.setState({
-    //       successMsg: "OTP Sent to Email!",
-    //       otpReceived: true,
-    //       otpResponse: response.data,
-    //     });
-    //   })
-    //   .catch((err) => {
-    //
-    //   });
   };
+
   otpFieldHandler = (event) => {
     this.setState({
       otpValue: event.target.value,
     });
   };
   onOtpSubmitHandler = (event) => {
+    this.setState({
+      isLoading: true,
+    });
     event.preventDefault();
-
     const url = "http://localhost:8080/users/checkOtp";
     const payload = {
       email: this.state.email,
@@ -75,7 +73,10 @@ class ForgotPwd extends Component {
       .post(url, payload)
       .then((response) => {
         if (response.data?.status === 200) {
-          this.props.history.push("/ResetPwd");
+          this.props.history.push("/resetpwd");
+          this.setState({
+            isLoading: false,
+          });
         } else {
           this.setState({
             errorMsg: "Invalid OTP, please try again!",
@@ -86,12 +87,13 @@ class ForgotPwd extends Component {
   };
 
   render() {
-    const { successMsg, errorMsg, otpReceived, email } = this.state;
+    const { successMsg, errorMsg, otpReceived, email, isLoading } = this.state;
     console.log(this.props.get_otp?.status, "user otp value");
     console.log(this.props.get_email?.email, "email value");
 
     return (
       <div>
+        {isLoading && <Loader></Loader>}
         <div className="container container-div">
           <div className="row">
             <div className="col-md-6 col-md-offset-4">

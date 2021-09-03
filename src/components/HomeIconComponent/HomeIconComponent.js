@@ -2,9 +2,10 @@ import React, { Component } from "react";
 import Menu from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
 import Button from "@material-ui/core/Button";
+import { withRouter } from "react-router";
 import "./HomeIconComponent.scss";
 
-export default class HomeIconComponent extends Component {
+class HomeIconComponent extends Component {
   //const [anchorEl, setAnchorEl] = React.useState(null);
   constructor() {
     super();
@@ -26,6 +27,9 @@ export default class HomeIconComponent extends Component {
       anchorEl: null,
     });
   };
+  onClickLogoutHandler = () => {
+    this.props.history.push("./");
+  };
   render() {
     const { anchorEl } = this.state;
     return (
@@ -42,14 +46,16 @@ export default class HomeIconComponent extends Component {
           keepMounted
           open={Boolean(anchorEl)}
           onClose={this.handleClose}
-          transformOrigin={{ vertical: "bottom", horizontal: "right" }}
+          // getContentAnchorEl={null}
           anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
+          transformOrigin={{ horizontal: "center", vertical: "bottom" }}
         >
           <MenuItem onClick={this.handleClose}>Profile</MenuItem>
           <MenuItem onClick={this.handleClose}>My account</MenuItem>
-          <MenuItem onClick={this.handleClose}>Logout</MenuItem>
+          <MenuItem onClick={this.onClickLogoutHandler}>Logout</MenuItem>
         </Menu>
       </div>
     );
   }
 }
+export default withRouter(HomeIconComponent);

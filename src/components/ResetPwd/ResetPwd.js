@@ -1,8 +1,9 @@
 import React, { Component } from "react";
 import { validate } from "validate.js";
 import axios from "axios";
-import "./ResetPwd.scss";
 import { connect } from "react-redux";
+import Loader from "../Loader/Loader";
+import "./ResetPwd.scss";
 
 class ResetPwd extends Component {
   constructor() {
@@ -16,6 +17,7 @@ class ResetPwd extends Component {
       errorMsg: "",
       pwdReset: false,
       email: this.props?.get_email,
+      isLoading: false,
     };
     this.constraints = {
       password: {
@@ -65,6 +67,9 @@ class ResetPwd extends Component {
     });
   };
   onSubmitFormHandler = (event) => {
+    this.setState({
+      isLoading: true,
+    });
     console.log(this.state.email);
     event.preventDefault();
     const url = "http://localhost:8080/users/resetPassword";
@@ -81,6 +86,7 @@ class ResetPwd extends Component {
         this.setState({
           successMsg: "Password changed succesfully!",
           pwdReset: true,
+          isLoading: false,
         });
       })
       .catch((err) => {
@@ -92,13 +98,20 @@ class ResetPwd extends Component {
       });
   };
   render() {
-    const { pwdReset, successMsg, errorMsg, errorMsgs, password, newpassword } =
-      this.state;
-    // console.log(this.props.match.params.email);
-    // console.log(this.props.user_info);
+    const {
+      pwdReset,
+      successMsg,
+      errorMsg,
+      errorMsgs,
+      password,
+      newpassword,
+      isLoading,
+    } = this.state;
+
     console.log(this.props?.get_email.email);
     return (
       <div>
+        {isLoading && <Loader></Loader>}
         <form onSubmit={this.onSubmitFormHandler}>
           <div className="card card-div-reset">
             <div className="card-body">

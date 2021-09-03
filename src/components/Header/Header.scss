@@ -5,6 +5,9 @@
   color: white;
   text-align: center;
   font-family: calibri;
+  position: fixed;
+  z-index: 10 !important;
+  top: 0;
 }
 .header-text {
   font-size: 20px;

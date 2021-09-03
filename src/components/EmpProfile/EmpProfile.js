@@ -4,6 +4,9 @@ import { connect } from "react-redux";
 import "./EmpProfile.scss";
 
 class EmpProfile extends Component {
+  constructor() {
+    super();
+  }
   componentDidMount() {
     axios
       .get("http://localhost:8080/users/empdetails/${emp_data._id}")
@@ -18,6 +21,7 @@ class EmpProfile extends Component {
   render() {
     console.log(this.props.user_info.emp_login.data._id);
     var emp_data = this.props.user_info.emp_login.data;
+
     const {
       employeeName,
       designation,
@@ -27,38 +31,41 @@ class EmpProfile extends Component {
       status,
     } = emp_data;
     return (
-      <div className="row justify-content-center">
-        <label className="text-center mt-3 profile-label">My Profile</label>
-        <div className="col-auto">
-          <table className="table table-bordered mt-3 text-center">
-            <tbody>
-              <tr>
-                <td>Employee Name</td>
-                <td>{employeeName}</td>
-              </tr>
-              <tr>
-                <td>Designation</td>
-                <td>{designation}</td>
-              </tr>
-              <tr>
-                <td>Employee Type</td>
-                <td>{employeeType}</td>
-              </tr>
-              <tr>
-                <td>Personal Email</td>
-                <td>{personalEmail}</td>
-              </tr>
+      <div>
+        <div className="row justify-content-center">
+          <label className="text-center mt-3 profile-label">My Profile</label>
 
-              <tr>
-                <td>role</td>
-                <td>{role}</td>
-              </tr>
-              <tr>
-                <td>status</td>
-                <td>{status}</td>
-              </tr>
-            </tbody>
-          </table>
+          <div className="col-auto">
+            <table className="table table-bordered mt-3 text-center">
+              <tbody>
+                <tr>
+                  <td>Employee Name</td>
+                  <td>{employeeName}</td>
+                </tr>
+                <tr>
+                  <td>Designation</td>
+                  <td>{designation}</td>
+                </tr>
+                <tr>
+                  <td>Employee Type</td>
+                  <td>{employeeType}</td>
+                </tr>
+                <tr>
+                  <td>Personal Email</td>
+                  <td>{personalEmail}</td>
+                </tr>
+
+                <tr>
+                  <td>role</td>
+                  <td>{role}</td>
+                </tr>
+                <tr>
+                  <td>status</td>
+                  <td>{status}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
     );

@@ -1,4 +1,12 @@
 @import "~react-pro-sidebar/dist/scss/styles.scss";
 .pro-sidebar {
-  height: 80vh !important;
+  // height: 100%;
+  // position: fixed;
+  // z-index: 0 !important;
+  // top: 190px;
+  margin-top: 0 !important;
+  position: fixed;
+  left: 0 !important;
+  z-index: 0;
+  padding-top: 30px !important;
 }

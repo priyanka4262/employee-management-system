@@ -8,7 +8,7 @@ import EmpProfile from "../EmpProfile/EmpProfile.js";
 import EmpRegistration from "../EmpRegistration/EmpRegistration";
 import RegSuccess from "../EmpRegistration/RegSuccess";
 import EmpList from "../EmpList/EmpList";
-//import "./Homepage.scss";
+import "./Homepage.scss";
 class Homepage extends Component {
   constructor(props) {
     super(props);
@@ -26,40 +26,40 @@ class Homepage extends Component {
     const { showMenu } = this.state;
 
     return (
-      <div>
+      <div className="row">
         <Header onMenuClick={this.onMenuClickHandler}></Header>
-        <div className="d-flex">
+        <div className="d-flex row">
           <div className="col-md-3">
             <Sidebar dataToSidebar={showMenu}></Sidebar>
           </div>
           <div className="col-md-9 content-div">
             <Switch>
               <Route
-                path={`${match.path}/Dashboard`}
+                path={`${match.path}/dashboard`}
                 component={DashBoard}
               ></Route>
               <Route
-                path={`${match.path}/MyProfile`}
+                path={`${match.path}/myprofile`}
                 component={EmpProfile}
               ></Route>
               <Route
-                path={`${match.path}/EmpRegistration`}
+                path={`${match.path}/empregistration`}
                 component={EmpRegistration}
               ></Route>
               <Route
                 exact
-                path={`${match.path}/EmpList`}
+                path={`${match.path}/emplist`}
                 component={EmpList}
               ></Route>
               <Route
-                path={`${match.path}/RegSuccess`}
+                path={`${match.path}/regsuccess`}
                 component={RegSuccess}
               ></Route>
             </Switch>
           </div>
         </div>
-        <div>
-          <Footer className="footer-div"></Footer>
+        <div className="row">
+          <Footer></Footer>
         </div>
       </div>
     );

@@ -72,7 +72,7 @@ class EmployeeLogin extends Component {
   };
   onClickForgotPwdHandler = (event) => {
     event.preventDefault();
-    this.props.history.push("./ForgotPwd");
+    this.props.history.push("./forgotpwd");
   };
   render() {
     const { username, password, errorMsgs, emp_img } = this.state;
@@ -96,9 +96,8 @@ class EmployeeLogin extends Component {
                   name="username"
                   value={username}
                   className="form-control col-xs-2 mt-1"
-                  id="exampleInputEmail1"
-                  aria-describedby="emailHelp"
                   placeholder="Enter User Name"
+                  autoComplete="off"
                   onChange={this.onChangeHandler}
                 ></input>
                 {errorMsgs.username && (
@@ -120,6 +119,7 @@ class EmployeeLogin extends Component {
                   value={password}
                   className="form-control col-xs-2 mt-1 "
                   placeholder="Password"
+                  autoComplete="off"
                   onChange={this.onChangeHandler}
                 ></input>
                 {errorMsgs.password && (
