@@ -1,20 +1,9 @@
-import react, { Component } from "react";
+import React, { Component } from "react";
 import { connect } from "react-redux";
-import { is_loading_action } from "../../Actions/LoaderAction";
-import { emp_profile } from "../../Actions/EmpProfileAction";
-import "./EmpProfile.scss";
 
-class EmpProfile extends Component {
-  constructor() {
-    super();
-  }
-  componentDidMount() {
-    let id = this.props.user_info.emp_login.data._id;
-    this.props.emp_profile(id);
-  }
+class UserProfile extends Component {
   render() {
-    var emp_data = this.props.user_info.emp_login.data;
-
+    console.log(this.props.emp_profile_info);
     const {
       employeeName,
       designation,
@@ -22,11 +11,15 @@ class EmpProfile extends Component {
       personalEmail,
       role,
       status,
-    } = emp_data;
+      primaryMobile,
+      joinedOn,
+    } = this.props.emp_profile_info.user_profile_info;
     return (
       <div>
         <div className="row justify-content-center">
-          <label className="text-center mt-3 profile-label">My Profile</label>
+          <label className="text-center mt-3 profile-label">
+            Employee Details
+          </label>
 
           <div className="col-auto">
             <table className="table table-bordered mt-3 text-center">
@@ -56,6 +49,14 @@ class EmpProfile extends Component {
                   <td>status</td>
                   <td>{status}</td>
                 </tr>
+                <tr>
+                  <td>Primary Mobile</td>
+                  <td>{primaryMobile}</td>
+                </tr>
+                <tr>
+                  <td>Joined On</td>
+                  <td>{joinedOn}</td>
+                </tr>
               </tbody>
             </table>
           </div>
@@ -65,14 +66,11 @@ class EmpProfile extends Component {
   }
 }
 const mapStateToProps = (state) => {
+  console.log(state);
   return {
-    user_info: state.emp_login,
+    isLoading: state.loader,
+    emp_profile_info: state.emp_profile,
   };
 };
-const mapDispatchtoProps = (dispatch) => {
-  return {
-    is_loading_action: (isLoading) => dispatch(is_loading_action(isLoading)),
-    emp_profile: (id) => dispatch(emp_profile(id)),
-  };
-};
-export default connect(mapStateToProps, mapDispatchtoProps)(EmpProfile);
+
+export default connect(mapStateToProps, null)(UserProfile);

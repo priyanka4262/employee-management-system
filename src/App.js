@@ -7,9 +7,16 @@ import ResetPwd from "./components/ResetPwd/ResetPwd";
 import ErrorPage from "./components/ErrorPage/ErrorPage";
 import ChangePwd from "./components/ChangePwd/ChangePwd";
 import Loader from "./components/Loader/Loader";
-function App() {
+
+import { is_loading_action } from "./Actions/LoaderAction";
+import { connect } from "react-redux";
+const App = (props) => {
+  const isLoading = props.isLoading.isLoading;
+
   return (
-    <>
+    <div>
+      {isLoading && <Loader></Loader>}
+
       <Switch>
         <Route exact path="/" component={EmployeeLogin}></Route>
         <Route path="/homepage" component={Homepage}></Route>
@@ -18,8 +25,13 @@ function App() {
         <Route exact path="/forgotpwd" component={ForgotPwd}></Route>
         <Route path={"/resetpwd"} component={ResetPwd}></Route>
       </Switch>
-    </>
+    </div>
   );
-}
+};
+const mapStateToProps = (state) => {
+  return {
+    isLoading: state.loader,
+  };
+};
 
-export default App;
+export default connect(mapStateToProps, { is_loading_action })(App);

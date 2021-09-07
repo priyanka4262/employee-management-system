@@ -1,8 +1,6 @@
 import { FORGOT_PWD_EMAIL, FORGOT_PWD_OTP } from "../Actions/Constants";
 const initialState = {};
 export default function (state = initialState, action) {
-  console.log("action in reducer", action);
-
   switch (action.type) {
     case FORGOT_PWD_OTP:
       return {

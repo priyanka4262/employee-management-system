@@ -1,9 +1,10 @@
 import React, { Component } from "react";
+import "./Loader.scss";
 
 export default class Loader extends Component {
   render() {
     return (
-      <div>
+      <div className="loader">
         <div className="progress progress-div">
           <div
             className="progress-bar w-75 progress-bar-div progress-bar-striped"

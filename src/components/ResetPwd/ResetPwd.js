@@ -1,7 +1,9 @@
 import React, { Component } from "react";
-import { validate } from "validate.js";
 import axios from "axios";
+import { validate } from "validate.js";
 import { connect } from "react-redux";
+import { alert_var_action } from "../../Actions/AlertVarAction";
+import { is_loading_action } from "../../Actions/LoaderAction";
 import Loader from "../Loader/Loader";
 import "./ResetPwd.scss";
 
@@ -17,7 +19,6 @@ class ResetPwd extends Component {
       errorMsg: "",
       pwdReset: false,
       email: this.props?.get_email,
-      isLoading: false,
     };
     this.constraints = {
       password: {
@@ -30,6 +31,13 @@ class ResetPwd extends Component {
         equality: "password",
       },
     };
+  }
+
+  componentDidMount() {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      this.props.history.push("./");
+    }
   }
 
   validateInput = (key, value) => {
@@ -46,6 +54,7 @@ class ResetPwd extends Component {
     }
     return null;
   };
+
   onPasswordChangeHandler = (event) => {
     event.preventDefault();
     const { errorMsgs } = this.state;
@@ -66,19 +75,14 @@ class ResetPwd extends Component {
       errorMsgs: errorMsgs,
     });
   };
+
   onSubmitFormHandler = (event) => {
-    this.setState({
-      isLoading: true,
-    });
-    console.log(this.state.email);
     event.preventDefault();
     const url = "http://localhost:8080/users/resetPassword";
     const payload = {
-      email: this.props?.get_email.email,
+      email: this.props?.get_email?.email,
       newpassword: this.state.newpassword,
     };
-    console.log(payload, "payload");
-
     axios
       .post(url, payload)
       .then((response) => {
@@ -88,6 +92,9 @@ class ResetPwd extends Component {
           pwdReset: true,
           isLoading: false,
         });
+        this.props.alert_var_action("reset_password");
+        this.props.is_loading_action(false);
+        this.props.history.push("./");
       })
       .catch((err) => {
         this.setState({
@@ -108,10 +115,8 @@ class ResetPwd extends Component {
       isLoading,
     } = this.state;
 
-    console.log(this.props?.get_email.email);
     return (
       <div>
-        {isLoading && <Loader></Loader>}
         <form onSubmit={this.onSubmitFormHandler}>
           <div className="card card-div-reset">
             <div className="card-body">
@@ -176,8 +181,16 @@ class ResetPwd extends Component {
 const mapStateToProps = (state) => {
   console.log(state);
   return {
-    // get_otp: state.forgot_pwd.get_otp,
+    get_otp: state.forgot_pwd.get_otp,
     get_email: state.forgot_pwd.get_email,
+    redirectFrom: state.alert_var,
   };
 };
-export default connect(mapStateToProps, null)(ResetPwd);
+const mapDispatchtoProps = (dispatch) => {
+  return {
+    is_loading_action: (isLoading) => dispatch(is_loading_action(isLoading)),
+    alert_var_action: (redirectFrom) =>
+      dispatch(alert_var_action(redirectFrom)),
+  };
+};
+export default connect(mapStateToProps, mapDispatchtoProps)(ResetPwd);

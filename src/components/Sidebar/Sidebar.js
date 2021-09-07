@@ -3,6 +3,7 @@ import { ProSidebar, SidebarContent } from "react-pro-sidebar";
 import { Menu, MenuItem, SubMenu } from "react-pro-sidebar";
 import { FaGem, FaHeart, FaUser } from "react-icons/fa";
 import { withRouter, Link } from "react-router-dom";
+import { connect } from "react-redux";
 import "react-pro-sidebar/dist/scss/styles.scss";
 import "./Sidebar.scss";
 
@@ -14,6 +15,7 @@ class Sidebar extends Component {
   render() {
     let { path } = this.props.match;
     let isSidebar = this.props.dataToSidebar;
+    const id = this.props.user_info.emp_login?.data?._id;
 
     return (
       <div className="pro-sidebar">
@@ -27,9 +29,13 @@ class Sidebar extends Component {
               <SubMenu icon={<FaHeart />} title="My Collection ">
                 <MenuItem>
                   My Profile
-                  <Link to={`${path}/myprofile`} />
+                  <Link to={`${path}/myprofile/`} />
                 </MenuItem>
-                <MenuItem>My Colleagues</MenuItem>
+                <MenuItem>
+                  My Reportees
+                  <Link to={`${path}/myreportees/${id}`} />
+                </MenuItem>
+
                 <MenuItem>My Timesheets</MenuItem>
               </SubMenu>
               <SubMenu icon={<FaUser />} title="Employee">
@@ -49,4 +55,9 @@ class Sidebar extends Component {
     );
   }
 }
-export default withRouter(Sidebar);
+const mapStateToProps = (state) => {
+  return {
+    user_info: state.emp_login,
+  };
+};
+export default withRouter(connect(mapStateToProps, null)(Sidebar));

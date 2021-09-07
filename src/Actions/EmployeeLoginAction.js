@@ -1,5 +1,6 @@
 import axios from "axios";
-import { FETCH_ITEMS } from "./Constants";
+import { FETCH_ITEMS, LOGIN_ERR, LOADER } from "./Constants";
+import { toast } from "react-toastify";
 
 export const validate_credentials =
   (emp_credentials, history) => (dispatch) => {
@@ -11,10 +12,23 @@ export const validate_credentials =
         } else {
           history.push("./homepage");
         }
+        dispatch({
+          type: LOGIN_ERR,
+          login_err: false,
+        });
       } else {
-        history.push("./errorPage");
+        dispatch({
+          type: LOGIN_ERR,
+          login_err: true,
+        });
+
+        toast.warn("Invalid credentials! please try again");
+        dispatch({
+          type: LOADER,
+          isLoading: false,
+        });
       }
-      localStorage.setItem("Token", response.data.token);
+      localStorage.setItem("token", response.data.token);
       dispatch({
         type: FETCH_ITEMS,
         user_info: response.data,

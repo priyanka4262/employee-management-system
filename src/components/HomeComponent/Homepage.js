@@ -1,13 +1,18 @@
 import React, { Component } from "react";
+import { connect } from "react-redux";
 import { Switch, Route } from "react-router";
+
+import { is_loading_action } from "../../Actions/LoaderAction";
 import Header from "../Header/Header";
 import Footer from "../Footer/Footer";
 import Sidebar from "../Sidebar/Sidebar";
 import DashBoard from "../DashBoard/DashBoard";
 import EmpProfile from "../EmpProfile/EmpProfile.js";
 import EmpRegistration from "../EmpRegistration/EmpRegistration";
-import RegSuccess from "../EmpRegistration/RegSuccess";
 import EmpList from "../EmpList/EmpList";
+import MyReportees from "../MyReportees/MyReportees";
+import UserProfile from "../UserProfile/UserProfile";
+
 import "./Homepage.scss";
 class Homepage extends Component {
   constructor(props) {
@@ -15,6 +20,9 @@ class Homepage extends Component {
     this.state = {
       showMenu: "",
     };
+  }
+  componentDidMount() {
+    this.props.is_loading_action(false);
   }
   onMenuClickHandler = (childData) => {
     this.setState({
@@ -39,7 +47,7 @@ class Homepage extends Component {
                 component={DashBoard}
               ></Route>
               <Route
-                path={`${match.path}/myprofile`}
+                path={`${match.path}/myprofile/`}
                 component={EmpProfile}
               ></Route>
               <Route
@@ -51,9 +59,14 @@ class Homepage extends Component {
                 path={`${match.path}/emplist`}
                 component={EmpList}
               ></Route>
+
               <Route
-                path={`${match.path}/regsuccess`}
-                component={RegSuccess}
+                path={`${match.path}/myreportees`}
+                component={MyReportees}
+              ></Route>
+              <Route
+                path={`${match.path}/userprofile`}
+                component={UserProfile}
               ></Route>
             </Switch>
           </div>
@@ -65,4 +78,15 @@ class Homepage extends Component {
     );
   }
 }
-export default Homepage;
+const mapStateToProps = (state) => {
+  console.log(state);
+  return {
+    isLoading: state.loader,
+  };
+};
+const mapDispatchtoProps = (dispatch) => {
+  return {
+    is_loading_action: (isLoading) => dispatch(is_loading_action(isLoading)),
+  };
+};
+export default connect(mapStateToProps, mapDispatchtoProps)(Homepage);

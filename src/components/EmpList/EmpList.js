@@ -1,7 +1,25 @@
 import React, { Component } from "react";
 import axios from "axios";
 import ReactPaginate from "react-paginate";
+import { connect } from "react-redux";
+import Dropdown from "react-bootstrap/Dropdown";
+import EmpProfile from "../EmpProfile/EmpProfile";
+import { is_loading_action } from "../../Actions/LoaderAction";
+import { emp_profile } from "../../Actions/EmpProfileAction";
 import "./EmpList.scss";
+const CustomToggle = React.forwardRef(({ children, onClick }, ref) => (
+  <a
+    href=""
+    ref={ref}
+    onClick={(e) => {
+      e.preventDefault();
+      onClick(e);
+    }}
+  >
+    {children}
+    <span className="threedots" />
+  </a>
+));
 
 const usersPerPage = 10;
 class EmpList extends Component {
@@ -12,25 +30,28 @@ class EmpList extends Component {
       searchText: "",
       pageNumber: 0,
       displayUsers: [],
-      isLoading: false,
+      menuitems: false,
+      viewDetails: false,
     };
   }
 
-  componentDidMount() {
-    this.setState({
-      isLoading: true,
-    });
+  componentDidMount = () => {
+    const token = localStorage.getItem("token");
+    this.props.is_loading_action(true);
     axios
       .get("http://localhost:8080/users/allemployees")
       .then((response) => {
         this.setState({
           users: response.data.data,
           displayUsers: response.data.data.slice(0, usersPerPage),
-          isLoading: false,
         });
+        this.props.is_loading_action(false);
       })
-      .catch((error) => console.log(error));
-  }
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
   changePage = ({ selected }) => {
     const { users } = this.state;
     const usersVisited = selected * usersPerPage;
@@ -39,14 +60,21 @@ class EmpList extends Component {
       displayUsers: users.slice(usersVisited, usersVisited + usersPerPage),
     });
   };
+
   onSearchFieldHandler = (event) => {
-    console.log("search triggered");
     this.setState({
       searchText: event.target.value,
     });
   };
+
+  onViewHandler = (id) => {
+    let history = this.props.history;
+    this.props.emp_profile(id);
+    history.push("./UserProfile");
+  };
+
   render() {
-    const { searchText, displayUsers, isLoading } = this.state;
+    const { searchText, displayUsers, viewDetails } = this.state;
     const pageCount = Math.ceil(this.state.users.length / usersPerPage);
     let serialNumber = this.state.pageNumber * usersPerPage + 1;
 
@@ -58,22 +86,9 @@ class EmpList extends Component {
         user.status?.toLowerCase().includes(searchText?.toLowerCase()) ||
         user.personalEmail?.toLowerCase().includes(searchText?.toLowerCase())
     );
-    console.log(newUsersList);
+
     return (
       <div>
-        <div>
-          {isLoading && (
-            <div className="progress progress-div">
-              <div
-                className="progress-bar w-75  progress-bar-div progress-bar-striped"
-                role="progressbar"
-                aria-valuenow="75"
-                aria-valuemin="0"
-                aria-valuemax="100"
-              ></div>
-            </div>
-          )}
-        </div>
         <div className="col-md-10 table-div">
           <div>
             <input
@@ -100,6 +115,7 @@ class EmpList extends Component {
                   <th scope="col">Designation</th>
                   <th scope="col">Status</th>
                   <th scope="col">Company EmailID</th>
+                  <th scope="col">More Options</th>
                 </tr>
               </thead>
               <tbody>
@@ -111,6 +127,22 @@ class EmpList extends Component {
                     <td>{user.designation}</td>
                     <td>{user.status}</td>
                     <td>{user.personalEmail}</td>
+                    <td>
+                      <div>
+                        <Dropdown>
+                          <Dropdown.Toggle as={CustomToggle} />
+                          <Dropdown.Menu size="sm" title="">
+                            <Dropdown.Item>Edit</Dropdown.Item>
+                            <Dropdown.Item
+                              onClick={() => this.onViewHandler(user._id)}
+                            >
+                              View
+                            </Dropdown.Item>
+                            <Dropdown.Item>Delete</Dropdown.Item>
+                          </Dropdown.Menu>
+                        </Dropdown>
+                      </div>
+                    </td>
                   </tr>
                 ))}
               </tbody>
@@ -132,4 +164,17 @@ class EmpList extends Component {
     );
   }
 }
-export default EmpList;
+const mapStateToProps = (state) => {
+  console.log(state);
+  return {
+    isLoading: state.loader,
+    emp_profile_info: state.emp_profile,
+  };
+};
+const mapDispatchtoProps = (dispatch) => {
+  return {
+    is_loading_action: (isLoading) => dispatch(is_loading_action(isLoading)),
+    emp_profile: (id) => dispatch(emp_profile(id)),
+  };
+};
+export default connect(mapStateToProps, mapDispatchtoProps)(EmpList);

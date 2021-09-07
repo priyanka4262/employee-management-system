@@ -1,9 +1,11 @@
 import React, { Component } from "react";
-import { validate } from "validate.js";
 import axios from "axios";
+import { validate } from "validate.js";
 import { connect } from "react-redux";
 import { withRouter } from "react-router-dom";
-import EmployeeLogin from "../LoginComponent/EmployeeLogin";
+
+import { is_loading_action } from "../../Actions/LoaderAction";
+import { alert_var_action } from "../../Actions/AlertVarAction";
 
 class ChangePwd extends Component {
   constructor() {
@@ -31,6 +33,10 @@ class ChangePwd extends Component {
         equality: "password",
       },
     };
+  }
+  componentDidMount() {
+    const token = localStorage.getItem("token");
+    this.props.is_loading_action(false);
   }
 
   validateInput = (key, value) => {
@@ -74,6 +80,7 @@ class ChangePwd extends Component {
   };
   onSubmitFormHandler = (event) => {
     event.preventDefault();
+    this.props.is_loading_action(true);
     const url = "http://localhost:8080/users/changePassword";
     const payload = {
       currentpassword: this.props.user_info.emp_login?.data.password,
@@ -90,6 +97,9 @@ class ChangePwd extends Component {
           successMsg: "Password changed succesfully!",
           pwdChange: true,
         });
+        this.props.alert_var_action("change_password");
+        this.props.is_loading_action(false);
+        this.props.history.push("./");
       })
       .catch((err) => {
         this.setState({
@@ -99,9 +109,7 @@ class ChangePwd extends Component {
         console.log(err);
       });
   };
-  backToLoginHandler = () => {
-    this.props.history.push("./");
-  };
+
   render() {
     const {
       pwdChange,
@@ -110,9 +118,8 @@ class ChangePwd extends Component {
       errorMsgs,
       password,
       newpassword,
-      email,
     } = this.state;
-    console.log(this.props.user_info.emp_login?.data.employeeId);
+
     return (
       <div>
         <form onSubmit={this.onSubmitFormHandler}>
@@ -128,6 +135,8 @@ class ChangePwd extends Component {
                   className="form-control "
                   placeholder="Email ID"
                   onChange={this.onPasswordChangeHandler}
+                  value={this.props.user_info.emp_login?.data?.personalEmail}
+                  disabled
                 />
                 {errorMsgs.email && (
                   <small className="form-text text-danger">
@@ -167,7 +176,7 @@ class ChangePwd extends Component {
               <button
                 type="submit"
                 className="btn btn-primary mt-3 changepwd-btn"
-                disabled={!password || !newpassword || !email}
+                disabled={!password || !newpassword}
               >
                 Change Password
               </button>
@@ -176,14 +185,6 @@ class ChangePwd extends Component {
                 {pwdChange ? (
                   <div className="d-flex mt-3 justify-content-center success-msg">
                     <div className="text-success">{successMsg}</div>
-                    <div>
-                      <button
-                        className="btn btn-primary"
-                        onClick={this.backToLoginHandler}
-                      >
-                        Back To Login
-                      </button>
-                    </div>
                   </div>
                 ) : (
                   <div className=" text-center mt-3 text-danger">
@@ -202,6 +203,17 @@ const mapStateToProps = (state) => {
   console.log(state);
   return {
     user_info: state.emp_login,
+    isLoading: state.loader,
+    redirectFrom: state.alert_var,
   };
 };
-export default withRouter(connect(mapStateToProps, null)(ChangePwd));
+const mapDispatchtoProps = (dispatch) => {
+  return {
+    is_loading_action: (isLoading) => dispatch(is_loading_action(isLoading)),
+    alert_var_action: (redirectFrom) =>
+      dispatch(alert_var_action(redirectFrom)),
+  };
+};
+export default withRouter(
+  connect(mapStateToProps, mapDispatchtoProps)(ChangePwd)
+);

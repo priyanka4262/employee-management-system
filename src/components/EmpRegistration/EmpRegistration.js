@@ -2,9 +2,9 @@ import React, { Component } from "react";
 import { withRouter } from "react-router";
 import { connect } from "react-redux";
 import { create_employee } from "../../Actions/CreateEmpAction";
+import { ToastContainer } from "react-toastify";
 import DatePicker from "react-datepicker";
 import validate from "validate.js";
-import "react-phone-number-input/style.css";
 
 import "./EmpRegistration.scss";
 import axios from "axios";
@@ -120,7 +120,6 @@ class EmpRegistration extends Component {
 
   onChangeFieldHandler = (event) => {
     event.preventDefault();
-    console.log("selected value", event.target.value, event.target.name);
     const { errorMsgs } = this.state;
     let key = event.target.name;
     let value =
@@ -144,15 +143,14 @@ class EmpRegistration extends Component {
   //   }
   // };
   componentDidMount() {
+    const token = localStorage.getItem("token");
     let url = "http://localhost:8080/users/managers";
     axios
       .get(url)
       .then((response) => {
-        console.log(response.data, "response from dropdown api");
         this.setState({
           managersList: response.data,
         });
-        console.log(this.state.managersList, "list of managers");
       })
       .catch((error) => {
         console.log(error);
@@ -161,8 +159,7 @@ class EmpRegistration extends Component {
 
   onRegFormSubmitHandler = (event) => {
     event.preventDefault();
-    console.log(this.state, "state value of emp reg");
-    console.log(parseInt(this.state.rmanager), "rmanager");
+
     const emp_reg_data = {
       fname: this.state.fname,
       lname: this.state.lname,
@@ -181,18 +178,17 @@ class EmpRegistration extends Component {
       rmanager: parseInt(this.state.rmanager),
     };
 
-    console.log("Login Successful", this.state, emp_reg_data);
     let history = this.props.history;
     this.props.create_employee(emp_reg_data, history);
   };
+
   onDateChangeHandler = (date) => {
-    console.log(date);
     this.setState({
       dob: date,
     });
   };
+
   onDateOfJoiningChangeHandler = (date) => {
-    console.log(date);
     this.setState({
       doj: date,
     });

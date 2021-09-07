@@ -1,13 +1,14 @@
-import { REGDATA } from "../Actions/Constants";
+import { LOADER } from "../Actions/Constants";
 
 const initialState = {};
 export default function (state = initialState, action) {
   switch (action.type) {
-    case REGDATA:
+    case LOADER:
       return {
         ...state,
-        emp_reg: action.user_reg_info,
+        isLoading: action.isLoading,
       };
+
     default:
       return state;
   }

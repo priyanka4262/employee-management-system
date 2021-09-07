@@ -1,10 +1,12 @@
+import React, { Component } from "react";
 import axios from "axios";
 import { withRouter } from "react-router";
-import React, { Component } from "react";
+import { connect } from "react-redux";
+
 import { forgot_pwd_action } from "../../Actions/ForgotPwdAction";
 import { get_email_action } from "../../Actions/ForgotPwdAction";
-import Loader from "../Loader/Loader";
-import { connect } from "react-redux";
+import { is_loading_action } from "../../Actions/LoaderAction";
+
 import "./ForgotPwd.scss";
 
 class ForgotPwd extends Component {
@@ -18,8 +20,13 @@ class ForgotPwd extends Component {
       otpValue: "",
       otpResponse: "",
       email_store: "",
-      isLoading: false,
     };
+  }
+  componentDidMount() {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      this.props.history.push("./");
+    }
   }
 
   onEmailChangeHandler = (event) => {
@@ -29,20 +36,18 @@ class ForgotPwd extends Component {
   };
 
   OtpGenerationHandler = (event) => {
-    this.setState({
-      isLoading: true,
-    });
     event.preventDefault();
-    const { email, successMsg, errorMsg } = this.state;
+    const { email } = this.state;
     const url = "http://localhost:8080/users/otpgeneration";
     this.props.forgot_pwd_action({ email: email });
     this.props.get_email_action({ email: email });
+    this.props.is_loading_action(true);
+
     if (this.props.get_otp?.status === 200) {
+      this.props.is_loading_action(false);
       this.setState({
         successMsg: "OTP Sent to Email!",
         otpReceived: true,
-        //otpResponse: true,
-        isLoading: false,
         email: "",
       });
     } else if (this.props.get_otp) {
@@ -59,13 +64,11 @@ class ForgotPwd extends Component {
     });
   };
   onOtpSubmitHandler = (event) => {
-    this.setState({
-      isLoading: true,
-    });
     event.preventDefault();
+
     const url = "http://localhost:8080/users/checkOtp";
     const payload = {
-      email: this.state.email,
+      email: this.props.get_email.email,
       otp: parseInt(this.state.otpValue),
     };
 
@@ -74,13 +77,12 @@ class ForgotPwd extends Component {
       .then((response) => {
         if (response.data?.status === 200) {
           this.props.history.push("/resetpwd");
-          this.setState({
-            isLoading: false,
-          });
+          this.props.is_loading_action(false);
         } else {
           this.setState({
             errorMsg: "Invalid OTP, please try again!",
           });
+          this.props.is_loading_action(true);
         }
       })
       .catch((err) => console.log(err));
@@ -88,12 +90,9 @@ class ForgotPwd extends Component {
 
   render() {
     const { successMsg, errorMsg, otpReceived, email, isLoading } = this.state;
-    console.log(this.props.get_otp?.status, "user otp value");
-    console.log(this.props.get_email?.email, "email value");
 
     return (
       <div>
-        {isLoading && <Loader></Loader>}
         <div className="container container-div">
           <div className="row">
             <div className="col-md-6 col-md-offset-4">
@@ -142,7 +141,6 @@ class ForgotPwd extends Component {
             </div>
           </div>
         </div>
-
         {otpReceived ? (
           <div className="card card-div d-flex">
             <div className="text-center">
@@ -180,12 +178,14 @@ const mapStateToProps = (state) => {
   return {
     get_otp: state.forgot_pwd.get_otp,
     get_email: state.forgot_pwd.get_email,
+    isLoading: state.loader,
   };
 };
 const mapDispatchtoProps = (dispatch) => {
   return {
     forgot_pwd_action: (email) => dispatch(forgot_pwd_action(email)),
     get_email_action: (email) => dispatch(get_email_action(email)),
+    is_loading_action: (isLoading) => dispatch(is_loading_action(isLoading)),
   };
 };
 export default withRouter(

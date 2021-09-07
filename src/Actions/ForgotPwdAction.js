@@ -1,6 +1,6 @@
+import axios from "axios";
 import { FORGOT_PWD_OTP } from "./Constants";
 import { FORGOT_PWD_EMAIL } from "./Constants";
-import axios from "axios";
 
 export const forgot_pwd_action = (email) => (dispatch) => {
   const url = "http://localhost:8080/users/otpgeneration";

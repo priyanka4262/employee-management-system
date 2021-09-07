@@ -3,7 +3,11 @@ import validate from "validate.js";
 import { withRouter } from "react-router";
 import { connect } from "react-redux";
 import { validate_credentials } from "../../Actions/EmployeeLoginAction";
+import { is_loading_action } from "../../Actions/LoaderAction";
+import { toast } from "react-toastify";
+
 import "./EmployeeLogin.scss";
+import "react-toastify/dist/ReactToastify.css";
 class EmployeeLogin extends Component {
   constructor() {
     super();
@@ -34,6 +38,14 @@ class EmployeeLogin extends Component {
       },
     };
   }
+  componentDidMount() {
+    if (this.props.redirectFrom.redirectFrom === "change_password") {
+      toast("Password Changed Successfully, Please Login Again");
+    }
+    if (this.props.redirectFrom.redirectFrom === "reset_password") {
+      toast("Password Changed Successfully, Please Login Again");
+    }
+  }
   validateInput = (field, value) => {
     let object = {};
     object[field] = value;
@@ -46,7 +58,7 @@ class EmployeeLogin extends Component {
   };
 
   onChangeHandler = (event) => {
-    const { errorMsgs } = this.state;
+    const { errorMsgs, isInvalidCredentials } = this.state;
     event.preventDefault();
     let key = event.target.name;
     let value = event.target.value;
@@ -64,12 +76,11 @@ class EmployeeLogin extends Component {
       password: this.state.password,
     };
     let history = this.props.history;
+
     this.props.validate_credentials(emp_credentials, history);
-    console.log(
-      this.props.user_info,
-      "user info coming from store using mapstatetoprops"
-    );
+    this.props.is_loading_action(true);
   };
+
   onClickForgotPwdHandler = (event) => {
     event.preventDefault();
     this.props.history.push("./forgotpwd");
@@ -136,7 +147,7 @@ class EmployeeLogin extends Component {
 
               <button
                 type="submit"
-                className="btn btn-primary col-xs-2 form-control btn-submit mt-4 mb-3"
+                className="btn btn-primary col-xs-2 form-control btn-submit mt-2 mb-3"
                 disabled={!username || !password}
               >
                 Login
@@ -149,14 +160,18 @@ class EmployeeLogin extends Component {
   }
 }
 const mapStateToProps = (state) => {
+  console.log(state);
   return {
     user_info: state.emp_login,
+    isLoading: state.loader,
+    redirectFrom: state.alert_var,
   };
 };
 const mapDispatchtoProps = (dispatch) => {
   return {
     validate_credentials: (emp_credentials, history) =>
       dispatch(validate_credentials(emp_credentials, history)),
+    is_loading_action: (isLoading) => dispatch(is_loading_action(isLoading)),
   };
 };
 export default withRouter(

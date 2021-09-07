@@ -5,6 +5,7 @@ import { Provider } from "react-redux";
 import { I18nextProvider } from "react-i18next";
 import { BrowserRouter } from "react-router-dom";
 import { ConnectedRouter } from "connected-react-router";
+import { ToastContainer } from "react-toastify";
 
 import store from "./store/Store";
 import App from "./App";
@@ -17,10 +18,11 @@ import "bootstrap/dist/js/bootstrap.min.js";
 import "bootstrap/dist/js/bootstrap.bundle.min";
 import "react-datepicker/dist/react-datepicker.css";
 import "font-awesome/css/font-awesome.min.css";
+import "react-toastify/dist/ReactToastify.css";
 
 axios.interceptors.request.use(
   (config) => {
-    const token = localStorage.getItem("Token");
+    const token = localStorage.getItem("token");
     config.headers.authorization = `Bearer ${token}`;
     return config;
   },
@@ -37,6 +39,7 @@ ReactDOM.render(
           <BrowserRouter>
             <App />
           </BrowserRouter>
+          <ToastContainer />
         </I18nextProvider>
       </ErrorBoundary>
     </Provider>

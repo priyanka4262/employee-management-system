@@ -1,13 +1,14 @@
-import { REGDATA } from "../Actions/Constants";
+import { ALERT_VAR } from "../Actions/Constants";
 
 const initialState = {};
 export default function (state = initialState, action) {
   switch (action.type) {
-    case REGDATA:
+    case ALERT_VAR:
       return {
         ...state,
-        emp_reg: action.user_reg_info,
+        redirectFrom: action.redirectFrom,
       };
+
     default:
       return state;
   }
