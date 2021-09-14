@@ -39,7 +39,7 @@ ReactDOM.render(
           <BrowserRouter>
             <App />
           </BrowserRouter>
-          <ToastContainer />
+          <ToastContainer position="top-center" />
         </I18nextProvider>
       </ErrorBoundary>
     </Provider>

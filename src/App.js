@@ -9,8 +9,11 @@ import Loader from "./components/Loader/Loader";
 
 import { is_loading_action } from "./Actions/LoaderAction";
 import { connect } from "react-redux";
+import EmpProfile from "./components/EmpProfile/EmpProfile";
+import Signout from "./components/Signout/Signout";
+
 const App = (props) => {
-  const isLoading = props.isLoading.isLoading;
+  const isLoading = props?.isLoading?.isLoading;
 
   return (
     <div>
@@ -22,6 +25,7 @@ const App = (props) => {
         <Route path="/changepwd" component={ChangePwd}></Route>
         <Route exact path="/forgotpwd" component={ForgotPwd}></Route>
         <Route path={"/resetpwd"} component={ResetPwd}></Route>
+        <Route path={"/signout"} component={Signout}></Route>
       </Switch>
     </div>
   );

@@ -130,7 +130,6 @@ class MyReportees extends Component {
             activeClassName={"paginationActive"}
           />
         </div>
-        */}
       </div>
     );
   }

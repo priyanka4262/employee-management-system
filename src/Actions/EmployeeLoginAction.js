@@ -22,7 +22,9 @@ export const validate_credentials =
           login_err: true,
         });
 
-        toast.warn("Invalid credentials! please try again");
+        toast.warn("Invalid credentials! please try again", {
+          position: "top-center",
+        });
         dispatch({
           type: LOADER,
           isLoading: false,
