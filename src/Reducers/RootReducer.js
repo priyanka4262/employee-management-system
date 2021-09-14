@@ -5,6 +5,8 @@ import ForgotPwdReducer from "./ForgotPwdReducer";
 import LoaderReducer from "./LoaderReducer";
 import AlertVarReducer from "./AlertVarReducer";
 import EmpProfileReducer from "./EmpProfileReducer";
+import ClearStoreReducer from "./ClearStoreReducer";
+import { CLEAR_DATA } from "../Actions/Constants";
 
 const rootReducer = () =>
   combineReducers({
@@ -14,13 +16,16 @@ const rootReducer = () =>
     loader: LoaderReducer,
     alert_var: AlertVarReducer,
     emp_profile: EmpProfileReducer,
+    clear_data: ClearStoreReducer,
   });
 
 // const rootReducer = (state, action) => {
+//   // console.log(state, action);
 //   if (action.type === CLEAR_DATA) {
 //     state = undefined;
 //   }
+
 //   return appReducer(state, action);
 // };
-//
+
 export default rootReducer;

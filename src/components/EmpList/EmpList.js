@@ -73,6 +73,30 @@ class EmpList extends Component {
     history.push("./UserProfile");
   };
 
+  onDeleteHandler = (id) => {
+    let history = this.props.history;
+    axios
+      .get(`http://localhost:8080/users/deleteEmployee/${id}`)
+      .then((response) => {
+        console.log(response);
+        if (response.data.code === 0) {
+          axios
+            .get("http://localhost:8080/users/allemployees")
+            .then((response) => {
+              this.setState({
+                users: response.data.data,
+                displayUsers: response.data.data.slice(0, usersPerPage),
+              });
+              this.props.is_loading_action(false);
+            })
+            .catch((error) => {
+              console.log(error);
+            });
+        }
+      })
+      .catch((err) => console.log(err));
+  };
+
   render() {
     const { searchText, displayUsers, viewDetails } = this.state;
     const pageCount = Math.ceil(this.state.users.length / usersPerPage);
@@ -128,20 +152,22 @@ class EmpList extends Component {
                     <td>{user.status}</td>
                     <td>{user.personalEmail}</td>
                     <td>
-                      <div>
-                        <Dropdown>
-                          <Dropdown.Toggle as={CustomToggle} />
-                          <Dropdown.Menu size="sm" title="">
-                            <Dropdown.Item>Edit</Dropdown.Item>
-                            <Dropdown.Item
-                              onClick={() => this.onViewHandler(user._id)}
-                            >
-                              View
-                            </Dropdown.Item>
-                            <Dropdown.Item>Delete</Dropdown.Item>
-                          </Dropdown.Menu>
-                        </Dropdown>
-                      </div>
+                      <Dropdown className="dropdown">
+                        <Dropdown.Toggle as={CustomToggle} />
+                        <Dropdown.Menu size="sm" title="">
+                          <Dropdown.Item>Edit</Dropdown.Item>
+                          <Dropdown.Item
+                            onClick={() => this.onViewHandler(user._id)}
+                          >
+                            View
+                          </Dropdown.Item>
+                          <Dropdown.Item
+                            onClick={() => this.onDeleteHandler(user._id)}
+                          >
+                            Delete
+                          </Dropdown.Item>
+                        </Dropdown.Menu>
+                      </Dropdown>
                     </td>
                   </tr>
                 ))}

@@ -1,9 +1,13 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
+//import { clear_user_profile } from "../../Actions/ClearStoreAction";
 
 class UserProfile extends Component {
+  // componentDidMount() {
+  //   this.props.clear_user_profile();
+  // }
   render() {
-    console.log(this.props.emp_profile_info);
+    console.log(this.props?.emp_profile_info?.user_profile_info);
     const {
       employeeName,
       designation,
@@ -13,7 +17,7 @@ class UserProfile extends Component {
       status,
       primaryMobile,
       joinedOn,
-    } = this.props.emp_profile_info.user_profile_info;
+    } = this.props?.emp_profile_info?.user_profile_info;
     return (
       <div>
         <div className="row justify-content-center">
@@ -72,5 +76,9 @@ const mapStateToProps = (state) => {
     emp_profile_info: state.emp_profile,
   };
 };
-
+// const mapDispatchtoProps = (dispatch) => {
+//   return {
+//     clear_user_profile: () => dispatch(clear_user_profile()),
+//   };
+// };
 export default connect(mapStateToProps, null)(UserProfile);

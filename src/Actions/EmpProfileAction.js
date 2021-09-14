@@ -10,7 +10,7 @@ export const emp_profile = (id) => (dispatch) => {
       console.log(response);
       dispatch({
         type: EMPDATA,
-        user_profile_info: response.data.data,
+        user_profile_info: response.data?.data,
       });
     })
     .catch((error) => {

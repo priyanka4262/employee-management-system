@@ -13,7 +13,7 @@ class EmpProfile extends Component {
     this.props.emp_profile(id);
   }
   render() {
-    var emp_data = this.props.user_info.emp_login.data;
+    var emp_data = this.props.user_info?.emp_login?.data;
 
     const {
       employeeName,

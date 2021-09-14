@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { Switch, Route } from "react-router";
+import { Switch, Route, Redirect } from "react-router";
 
 import { is_loading_action } from "../../Actions/LoaderAction";
 import Header from "../Header/Header";
@@ -12,8 +12,11 @@ import EmpRegistration from "../EmpRegistration/EmpRegistration";
 import EmpList from "../EmpList/EmpList";
 import MyReportees from "../MyReportees/MyReportees";
 import UserProfile from "../UserProfile/UserProfile";
+import PrivateRoute from "../PrivateRoute";
+import AuthenticatedComponent from "../PrivateRoute";
 
 import "./Homepage.scss";
+
 class Homepage extends Component {
   constructor(props) {
     super(props);
@@ -24,11 +27,18 @@ class Homepage extends Component {
   componentDidMount() {
     this.props.is_loading_action(false);
   }
+  componentWillMount() {
+    if (!localStorage.getItem("token")) {
+      console.log("in component will mount");
+      this.props.history.push("/");
+    }
+  }
   onMenuClickHandler = (childData) => {
     this.setState({
       showMenu: childData,
     });
   };
+
   render() {
     let { match } = this.props;
     const { showMenu } = this.state;
@@ -79,7 +89,7 @@ class Homepage extends Component {
   }
 }
 const mapStateToProps = (state) => {
-  console.log(state);
+  // console.log(state);
   return {
     isLoading: state.loader,
   };

@@ -36,6 +36,9 @@ class ChangePwd extends Component {
   }
   componentDidMount() {
     const token = localStorage.getItem("token");
+    if (!token) {
+      this.props.history.push("./");
+    }
     this.props.is_loading_action(false);
   }
 

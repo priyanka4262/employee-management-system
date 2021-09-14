@@ -39,11 +39,15 @@ class EmployeeLogin extends Component {
     };
   }
   componentDidMount() {
-    if (this.props.redirectFrom.redirectFrom === "change_password") {
-      toast("Password Changed Successfully, Please Login Again");
+    if (this.props?.redirectFrom?.redirectFrom === "change_password") {
+      toast("Password Changed Successfully, Please Login Again", {
+        position: "top-center",
+      });
     }
-    if (this.props.redirectFrom.redirectFrom === "reset_password") {
-      toast("Password Changed Successfully, Please Login Again");
+    if (this.props?.redirectFrom?.redirectFrom === "reset_password") {
+      toast("Password Changed Successfully, Please Login Again", {
+        position: "top-center",
+      });
     }
   }
   validateInput = (field, value) => {
@@ -160,7 +164,7 @@ class EmployeeLogin extends Component {
   }
 }
 const mapStateToProps = (state) => {
-  console.log(state);
+  //console.log(state);
   return {
     user_info: state.emp_login,
     isLoading: state.loader,

@@ -15,7 +15,7 @@ class Sidebar extends Component {
   render() {
     let { path } = this.props.match;
     let isSidebar = this.props.dataToSidebar;
-    const id = this.props.user_info.emp_login?.data?._id;
+    const id = this.props.user_info?.emp_login?.data?._id;
 
     return (
       <div className="pro-sidebar">

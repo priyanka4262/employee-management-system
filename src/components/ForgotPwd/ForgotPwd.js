@@ -38,7 +38,7 @@ class ForgotPwd extends Component {
   OtpGenerationHandler = (event) => {
     event.preventDefault();
     const { email } = this.state;
-    const url = "http://localhost:8080/users/otpgeneration";
+
     this.props.forgot_pwd_action({ email: email });
     this.props.get_email_action({ email: email });
     this.props.is_loading_action(true);
