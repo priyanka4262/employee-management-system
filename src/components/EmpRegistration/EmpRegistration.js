@@ -2,17 +2,18 @@ import React, { Component } from "react";
 import { withRouter } from "react-router";
 import { connect } from "react-redux";
 import { create_employee } from "../../Actions/CreateEmpAction";
-import { ToastContainer } from "react-toastify";
-import DatePicker from "react-datepicker";
+import { update_employee } from "../../Actions/UpdateEmpAction";
+import { emp_profile } from "../../Actions/EmpProfileAction";
 import validate from "validate.js";
-
 import "./EmpRegistration.scss";
 import axios from "axios";
 
 class EmpRegistration extends Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
+
     this.state = {
+      id: "",
       fname: "",
       lname: "",
       email: "",
@@ -30,6 +31,11 @@ class EmpRegistration extends Component {
       designation: "",
       errorMsgs: {},
       managersList: [],
+      isUpdateFlow: false,
+      updatedUserData: [],
+      managerId: "",
+      empId: this.props.match.params.id,
+      empData: this.props?.user_profile_info,
     };
     this.constraints = {
       fname: {
@@ -142,56 +148,115 @@ class EmpRegistration extends Component {
   //     return false;
   //   }
   // };
+
   componentDidMount() {
+    const { empData, managersList, empId } = this.state;
     const token = localStorage.getItem("token");
-    let url = "http://localhost:8080/users/managers";
-    axios
-      .get(url)
-      .then((response) => {
-        this.setState({
-          managersList: response.data,
+
+    if (empId) {
+      console.log("in edit mode");
+      this.props.emp_profile(this.state.empId);
+      let url = "http://localhost:8080/users/managers";
+      axios
+        .get(url)
+        .then((response) => {
+          this.setState({
+            managersList: response.data,
+          });
+          console.log(this.state.managersList);
+          this.state.managersList.map((res) => {
+            if (res.employeeId === empData?.manager) {
+              this.setState({
+                rmanager: res.employeeId,
+              });
+            }
+          });
+          this.setState({
+            ...this.state,
+            id: empData?._id,
+            fname: empData?.employeeName.split(" ")[0],
+            lname: empData?.employeeName.split(" ")[1],
+            email: empData?.personalEmail,
+            mobile1: empData?.primaryMobile,
+            mobile2: empData?.alternateMobile,
+            address: empData?.address,
+            payRollType: empData?.payRollType,
+            role: empData?.role,
+            employeeType: empData?.employeeType,
+            cost: empData?.cost,
+            jobstatus: empData?.status,
+            designation: empData?.designation,
+            doj: empData?.joinedOn,
+            dob: empData?.dob,
+            isUpdateFlow: true,
+          });
+        })
+        .catch((error) => {
+          console.log(error);
         });
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+    } else {
+      let url = "http://localhost:8080/users/managers";
+      axios
+        .get(url)
+        .then((response) => {
+          this.setState({
+            managersList: response.data,
+          });
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    }
   }
 
   onRegFormSubmitHandler = (event) => {
+    const { id } = this.state;
+    console.log("id", id);
     event.preventDefault();
-
-    const emp_reg_data = {
-      fname: this.state.fname,
-      lname: this.state.lname,
-      email: this.state.email,
-      mobile1: this.state.mobile1,
-      mobile2: this.state.mobile2,
-      address: this.state.address,
-      dob: this.state.dob,
-      epayroll: this.state.payRollType,
-      erole: this.state.role,
-      etype: this.state.employeeType,
-      ctc: this.state.cost,
-      doj: this.state.doj,
-      jobstatus: this.state.jobstatus,
-      designation: this.state.designation,
-      rmanager: parseInt(this.state.rmanager),
-    };
-
+    console.log("on submit handler of emp reg");
     let history = this.props.history;
-    this.props.create_employee(emp_reg_data, history);
-  };
 
-  onDateChangeHandler = (date) => {
-    this.setState({
-      dob: date,
-    });
-  };
+    if (this.state.isUpdateFlow) {
+      console.log("update flow is true");
+      const emp_update_data = {
+        etype: this.state.employeeType,
+        erole: this.state.role,
+        designation: this.state.designation,
+        email: this.state.email,
+        mobile1: this.state.mobile1,
+        mobile2: this.state.mobile2,
+        doj: this.state.doj,
+        jobstatus: this.state.jobstatus,
+        dob: this.state.dob,
+        address: this.state.address,
+        rmanager: parseInt(this.state.rmanager),
+        epayroll: this.state.payRollType,
+        ctc: this.state.cost,
+        _id: this.state.id,
+      };
+      console.log("emp_update_data", emp_update_data);
+      this.props.update_employee(emp_update_data, history);
+    } else {
+      const emp_reg_data = {
+        fname: this.state.fname,
+        lname: this.state.lname,
+        email: this.state.email,
+        mobile1: this.state.mobile1,
+        mobile2: this.state.mobile2,
+        address: this.state.address,
+        dob: this.state.dob,
+        epayroll: this.state.payRollType,
+        erole: this.state.role,
+        etype: this.state.employeeType,
+        ctc: this.state.cost,
+        doj: this.state.doj,
+        jobstatus: this.state.jobstatus,
+        designation: this.state.designation,
+        rmanager: parseInt(this.state.rmanager),
+      };
 
-  onDateOfJoiningChangeHandler = (date) => {
-    this.setState({
-      doj: date,
-    });
+      this.props.create_employee(emp_reg_data, history);
+    }
   };
 
   render() {
@@ -226,7 +291,9 @@ class EmpRegistration extends Component {
                   <div className="card ">
                     <div className="card-body p-3 card-div-emp">
                       <h3 className=" text-center mb-5 sub-heading">
-                        Register an Employee
+                        {this.state.isUpdateFlow
+                          ? "Edit Employee Details"
+                          : "Register an Employee"}
                       </h3>
                       <form onSubmit={this.onRegFormSubmitHandler}>
                         <div className="row">
@@ -393,14 +460,15 @@ class EmpRegistration extends Component {
                               Date of Birth
                             </label>
                             <div className="customDatePickerWidth">
-                              <DatePicker
+                              <input
                                 name="dob"
                                 value={dob}
+                                type="date"
                                 placeholder="Date of Birth"
                                 autoComplete="off"
                                 selected={this.state.dob}
                                 className="form-control form-control-md"
-                                onChange={this.onDateChangeHandler}
+                                onChange={this.onChangeFieldHandler}
                               />
                             </div>
 
@@ -449,13 +517,15 @@ class EmpRegistration extends Component {
                               Date of Joining
                             </label>
                             <div className="customDatePickerWidth">
-                              <DatePicker
+                              <input
                                 name="doj"
                                 value={doj}
+                                type="date"
+                                autoComplete="off"
                                 placeholder="Date of Joining"
                                 selected={this.state.doj}
                                 className="form-control form-control-md"
-                                onChange={this.onDateOfJoiningChangeHandler}
+                                onChange={this.onChangeFieldHandler}
                               />
                             </div>
 
@@ -645,7 +715,7 @@ class EmpRegistration extends Component {
                             type="submit"
                             className="btn btn-success btn-block btn-lg gradient-custom-4 text-body"
                           >
-                            Create
+                            {this.state.isUpdateFlow ? "Update" : "Create"}
                           </button>
                         </div>
                       </form>
@@ -664,12 +734,18 @@ const mapStateToProps = (state) => {
   console.log(state);
   return {
     user_reg_info: state.emp_reg,
+    user_profile_info: state.emp_profile.user_profile_info,
   };
 };
 const mapDispatchtoProps = (dispatch) => {
   return {
     create_employee: (emp_reg_data, history) =>
       dispatch(create_employee(emp_reg_data, history)),
+
+    update_employee: (emp_update_data, history) =>
+      dispatch(update_employee(emp_update_data, history)),
+
+    emp_profile: (id) => dispatch(emp_profile(id)),
   };
 };
 export default withRouter(

@@ -12,9 +12,7 @@ export const create_employee = (emp_reg_data, history) => (dispatch) => {
         type: REGDATA,
         user_reg_info: response.data,
       });
-      toast("Employee Created Successfully", {
-        position: "top-center",
-      });
+      toast("Employee Created Successfully");
       history.push("./emplist");
     })
     .catch((error) => {

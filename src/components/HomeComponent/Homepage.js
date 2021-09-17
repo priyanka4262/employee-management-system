@@ -12,6 +12,8 @@ import EmpRegistration from "../EmpRegistration/EmpRegistration";
 import EmpList from "../EmpList/EmpList";
 import MyReportees from "../MyReportees/MyReportees";
 import UserProfile from "../UserProfile/UserProfile";
+import TimeSheet from "../TimeSheet/TimeSheet";
+import TimeSheetDesc from "../TimeSheetDesc/TimeSheetDesc";
 import PrivateRoute from "../PrivateRoute";
 import AuthenticatedComponent from "../PrivateRoute";
 
@@ -65,6 +67,10 @@ class Homepage extends Component {
                 component={EmpRegistration}
               ></Route>
               <Route
+                path={`${match.path}/emplist/editemp/:id`}
+                component={EmpRegistration}
+              ></Route>
+              <Route
                 exact
                 path={`${match.path}/emplist`}
                 component={EmpList}
@@ -77,6 +83,14 @@ class Homepage extends Component {
               <Route
                 path={`${match.path}/userprofile`}
                 component={UserProfile}
+              ></Route>
+              <Route
+                path={`${match.path}/mytimesheets`}
+                component={TimeSheet}
+              ></Route>
+              <Route
+                path={`${match.path}/timesheetdesc`}
+                component={TimeSheetDesc}
               ></Route>
             </Switch>
           </div>

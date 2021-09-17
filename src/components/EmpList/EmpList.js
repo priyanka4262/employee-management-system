@@ -66,6 +66,11 @@ class EmpList extends Component {
       searchText: event.target.value,
     });
   };
+  onEditHandler = (id) => {
+    const pathName = this.props.location.pathname;
+    console.log(pathName);
+    this.props.history.push(`${pathName}/editemp/${id}`);
+  };
 
   onViewHandler = (id) => {
     let history = this.props.history;
@@ -74,7 +79,6 @@ class EmpList extends Component {
   };
 
   onDeleteHandler = (id) => {
-    let history = this.props.history;
     axios
       .get(`http://localhost:8080/users/deleteEmployee/${id}`)
       .then((response) => {
@@ -155,7 +159,11 @@ class EmpList extends Component {
                       <Dropdown className="dropdown">
                         <Dropdown.Toggle as={CustomToggle} />
                         <Dropdown.Menu size="sm" title="">
-                          <Dropdown.Item>Edit</Dropdown.Item>
+                          <Dropdown.Item
+                            onClick={() => this.onEditHandler(user._id)}
+                          >
+                            Edit
+                          </Dropdown.Item>
                           <Dropdown.Item
                             onClick={() => this.onViewHandler(user._id)}
                           >

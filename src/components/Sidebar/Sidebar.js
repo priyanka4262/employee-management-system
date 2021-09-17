@@ -35,8 +35,10 @@ class Sidebar extends Component {
                   My Reportees
                   <Link to={`${path}/myreportees/${id}`} />
                 </MenuItem>
-
-                <MenuItem>My Timesheets</MenuItem>
+                <MenuItem>
+                  My Timesheets
+                  <Link to={`${path}/mytimesheets`} />
+                </MenuItem>
               </SubMenu>
               <SubMenu icon={<FaUser />} title="Employee">
                 <MenuItem>

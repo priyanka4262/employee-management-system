@@ -3,7 +3,9 @@ import Menu from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
 import Button from "@material-ui/core/Button";
 import { withRouter } from "react-router";
+import { clear_store } from "../../Actions/ClearStoreAction";
 import "./HomeIconComponent.scss";
+import { connect } from "react-redux";
 
 class HomeIconComponent extends Component {
   //const [anchorEl, setAnchorEl] = React.useState(null);
@@ -28,10 +30,13 @@ class HomeIconComponent extends Component {
     });
   };
   onClickLogoutHandler = () => {
+    this.props.clear_store();
+    localStorage.clear();
     this.props.history.push("./");
   };
   render() {
     const { anchorEl } = this.state;
+
     return (
       <div>
         <Button aria-controls="simple-menu" aria-haspopup="true">
@@ -58,4 +63,18 @@ class HomeIconComponent extends Component {
     );
   }
 }
-export default withRouter(HomeIconComponent);
+const mapStateToProps = (state) => {
+  console.log(state);
+  return {
+    isLoading: state.loader,
+  };
+};
+const mapDispatchtoProps = (dispatch) => {
+  return {
+    clear_store: () => dispatch(clear_store()),
+    // is_loading_action: (isLoading) => dispatch(is_loading_action(isLoading)),
+  };
+};
+export default withRouter(
+  connect(mapStateToProps, mapDispatchtoProps)(HomeIconComponent)
+);

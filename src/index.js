@@ -19,6 +19,7 @@ import "bootstrap/dist/js/bootstrap.bundle.min";
 import "react-datepicker/dist/react-datepicker.css";
 import "font-awesome/css/font-awesome.min.css";
 import "react-toastify/dist/ReactToastify.css";
+import "react-big-calendar/lib/css/react-big-calendar.css";
 
 axios.interceptors.request.use(
   (config) => {
@@ -39,7 +40,7 @@ ReactDOM.render(
           <BrowserRouter>
             <App />
           </BrowserRouter>
-          <ToastContainer position="top-center" />
+          <ToastContainer />
         </I18nextProvider>
       </ErrorBoundary>
     </Provider>

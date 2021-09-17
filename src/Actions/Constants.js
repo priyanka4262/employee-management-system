@@ -8,3 +8,4 @@ export const CLEAR_DATA = "CLEAR_DATA";
 export const ALERT_VAR = "ALERT_VAR";
 export const EMPDATA = "EMPDATA";
 export const CLEAR_USER_DATA = "CLEAR_USER_DATA";
+export const UPDATEDATA = "UPDATEDATA";

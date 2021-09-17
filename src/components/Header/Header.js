@@ -19,7 +19,7 @@ class Header extends Component {
     this.props.onMenuClick(this.state.showMenu);
   };
   onSignoutHandler = () => {
-    // localStorage.clear();
+    localStorage.clear();
     this.props.history.push("/");
     // this.props.clear_store();
   };
