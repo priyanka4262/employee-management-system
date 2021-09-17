@@ -5,20 +5,18 @@ import Homepage from "./components/HomeComponent/Homepage";
 import ForgotPwd from "./components/ForgotPwd/ForgotPwd";
 import ResetPwd from "./components/ResetPwd/ResetPwd";
 import ChangePwd from "./components/ChangePwd/ChangePwd";
-import Loader from "./components/Loader/Loader";
+import LinearProgress from "@material-ui/core/LinearProgress";
 
 import { is_loading_action } from "./Actions/LoaderAction";
 import { connect } from "react-redux";
-import EmpProfile from "./components/EmpProfile/EmpProfile";
 import Signout from "./components/Signout/Signout";
-import TimeSheetDesc from "./components/TimeSheetDesc/TimeSheetDesc";
 
 const App = (props) => {
   const isLoading = props?.isLoading?.isLoading;
 
   return (
     <div>
-      {isLoading && <Loader></Loader>}
+      {isLoading && <LinearProgress />}
 
       <Switch>
         <Route exact path="/" component={EmployeeLogin}></Route>
