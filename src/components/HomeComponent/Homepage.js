@@ -14,8 +14,8 @@ import MyReportees from "../MyReportees/MyReportees";
 import UserProfile from "../UserProfile/UserProfile";
 import TimeSheet from "../TimeSheet/TimeSheet";
 import TimeSheetDesc from "../TimeSheetDesc/TimeSheetDesc";
-import PrivateRoute from "../PrivateRoute";
-import AuthenticatedComponent from "../PrivateRoute";
+// import PrivateRoute from "../PrivateRoute";
+// import AuthenticatedComponent from "../PrivateRoute";
 
 import "./Homepage.scss";
 

@@ -14,7 +14,7 @@ class EmpProfile extends Component {
   }
   render() {
     var emp_data = this.props.user_info?.emp_login?.data;
-
+    console.log(emp_data);
     const {
       employeeName,
       designation,

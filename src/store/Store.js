@@ -8,7 +8,7 @@ const initialState = {};
 export default function configureStore(preloadedState) {
   const middleware = [thunkMiddleware];
   const store = createStore(
-    rootReducer(),
+    rootReducer,
     preloadedState,
     composeWithDevTools(applyMiddleware(...middleware))
   );

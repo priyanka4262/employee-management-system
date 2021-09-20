@@ -9,25 +9,33 @@ import ClearStoreReducer from "./ClearStoreReducer";
 import UpdateEmpReducer from "./UpdateEmpReducer";
 import { CLEAR_DATA } from "../Actions/Constants";
 
-const rootReducer = () =>
-  combineReducers({
-    emp_login: EmployeeLoginReducer,
-    emp_reg: CreateEmpReducer,
-    emp_update: UpdateEmpReducer,
-    forgot_pwd: ForgotPwdReducer,
-    loader: LoaderReducer,
-    alert_var: AlertVarReducer,
-    emp_profile: EmpProfileReducer,
-    clear_data: ClearStoreReducer,
-  });
+let newState = {
+  emp_login: {},
+  emp_reg: {},
+  emp_update: {},
+  forgot_pwd: {},
+  loader: {},
+  alert_var: {},
+  emp_profile:{}
+};
 
-// const rootReducer = (state, action) => {
-//   // console.log(state, action);
-//   if (action.type === CLEAR_DATA) {
-//     state = undefined;
-//   }
+const appReducer = combineReducers({
+  emp_login: EmployeeLoginReducer,
+  emp_reg: CreateEmpReducer,
+  emp_update: UpdateEmpReducer,
+  forgot_pwd: ForgotPwdReducer,
+  loader: LoaderReducer,
+  alert_var: AlertVarReducer,
+  emp_profile: EmpProfileReducer,
+  clear_data: ClearStoreReducer,
+})
 
-//   return appReducer(state, action);
-// };
+const rootReducer = (state, action) => {
+  console.log(state, action, "actions")
+  if (action?.type === 'CLEAR_DATA') {
+    return appReducer(newState, action)
+  }
+  return appReducer(state, action)
+}
 
 export default rootReducer;

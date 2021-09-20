@@ -7,6 +7,7 @@ export const validate_credentials =
     const url = "http://localhost:8080/users/login";
     axios.post(url, emp_credentials).then((response) => {
       if (response.data.code === 1) {
+        localStorage.setItem("token", response.data.token);
         if (response.data.data.firstLogin) {
           history.push("./changepwd");
         } else {
@@ -30,7 +31,6 @@ export const validate_credentials =
           isLoading: false,
         });
       }
-      localStorage.setItem("token", response.data.token);
       dispatch({
         type: FETCH_ITEMS,
         user_info: response.data,

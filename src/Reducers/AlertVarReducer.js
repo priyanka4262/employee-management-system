@@ -2,7 +2,7 @@ import { ALERT_VAR } from "../Actions/Constants";
 
 const initialState = {};
 export default function (state = initialState, action) {
-  switch (action.type) {
+  switch (action?.type) {
     case ALERT_VAR:
       return {
         ...state,

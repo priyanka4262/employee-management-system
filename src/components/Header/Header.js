@@ -21,7 +21,7 @@ class Header extends Component {
   onSignoutHandler = () => {
     localStorage.clear();
     this.props.history.push("/");
-    // this.props.clear_store();
+    this.props.clear_store();
   };
   render() {
     return (

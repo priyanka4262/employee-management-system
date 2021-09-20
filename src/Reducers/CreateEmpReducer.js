@@ -2,7 +2,7 @@ import { REGDATA } from "../Actions/Constants";
 
 const initialState = {};
 export default function (state = initialState, action) {
-  switch (action.type) {
+  switch (action?.type) {
     case REGDATA:
       return {
         ...state,

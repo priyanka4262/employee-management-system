@@ -20,13 +20,33 @@ class ForgotPwd extends Component {
       otpValue: "",
       otpResponse: "",
       email_store: "",
+      currentInstance: this
     };
   }
   componentDidMount() {
-    const token = localStorage.getItem("token");
-    if (!token) {
-      this.props.history.push("./");
+    // const token = localStorage.getItem("token");
+    // if (!token) {
+    //   this.props.history.push("./");
+    // }
+  }
+
+  static getDerivedStateFromProps(nextProps, prevState) {
+    if (nextProps?.get_otp?.data && !prevState?.otpReceived) {
+      if (nextProps?.get_otp?.status === 200) {
+        prevState.currentInstance.props.is_loading_action(false);
+        return {  
+          successMsg: "OTP Sent to Email!",
+          otpReceived: true,
+          email: ""
+        }
+      } else {
+        return {
+          errorMsg: "Unable to generate OTP",
+          otpReceived: false,
+        }
+      }
     }
+    return null;
   }
 
   onEmailChangeHandler = (event) => {
@@ -43,19 +63,19 @@ class ForgotPwd extends Component {
     this.props.get_email_action({ email: email });
     this.props.is_loading_action(true);
 
-    if (this.props.get_otp?.status === 200) {
-      this.props.is_loading_action(false);
-      this.setState({
-        successMsg: "OTP Sent to Email!",
-        otpReceived: true,
-        email: "",
-      });
-    } else if (this.props.get_otp) {
-      this.setState({
-        errorMsg: "Unable to generate OTP",
-        otpReceived: false,
-      });
-    }
+    // if (this.props.get_otp?.status === 200) {
+    //   this.props.is_loading_action(false);
+    //   this.setState({
+    //     successMsg: "OTP Sent to Email!",
+    //     otpReceived: true,
+    //     email: "",
+    //   });
+    // } else if (this.props.get_otp) {
+    //   this.setState({
+    //     errorMsg: "Unable to generate OTP",
+    //     otpReceived: false,
+    //   });
+    // }
   };
 
   otpFieldHandler = (event) => {
