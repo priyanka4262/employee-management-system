@@ -7,6 +7,9 @@ import EmpProfile from "../EmpProfile/EmpProfile";
 import { is_loading_action } from "../../Actions/LoaderAction";
 import { emp_profile } from "../../Actions/EmpProfileAction";
 import "./EmpList.scss";
+import { confirmAlert } from "react-confirm-alert";
+import "react-confirm-alert/src/react-confirm-alert.css";
+
 const CustomToggle = React.forwardRef(({ children, onClick }, ref) => (
   <a
     href=""
@@ -77,8 +80,7 @@ class EmpList extends Component {
     this.props.emp_profile(id);
     history.push("./UserProfile");
   };
-
-  onDeleteHandler = (id) => {
+  onDelete = (id) => {
     axios
       .get(`http://localhost:8080/users/deleteEmployee/${id}`)
       .then((response) => {
@@ -99,6 +101,35 @@ class EmpList extends Component {
         }
       })
       .catch((err) => console.log(err));
+  };
+  onDeleteHandler = (id) => {
+    console.log("delete emp=", id);
+    confirmAlert({
+      customUI: ({ onClose }) => {
+        return (
+          <div className="custom-ui">
+            <div className="react-confirm-alert-body">
+              <h1>Are you sure?</h1>
+              <p>You want to delete this file?</p>
+              <div class="react-confirm-alert-button-group">
+                <button className="btn-primary" onClick={onClose}>
+                  No
+                </button>
+                <button
+                  className="btn-primary"
+                  onClick={() => {
+                    this.onDelete(id);
+                    onClose();
+                  }}
+                >
+                  Yes, Delete it!
+                </button>
+              </div>
+            </div>
+          </div>
+        );
+      },
+    });
   };
 
   render() {
